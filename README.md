@@ -38,7 +38,7 @@ flowchart LR
     Tasks --> API
 ```
 
-Start with the [documentation hub](docs/README.md). Technical architecture is in [docs/technical/architecture.md](docs/technical/architecture.md), with editable [Mermaid source](docs/technical/architecture.mmd). Plain-language product and workflow guides are under [docs/user](docs/user/).
+Start with the [documentation hub](docs/README.md). Before changing models or submission scope, review the [hackathon requirements register](docs/hackathon/requirements-register.md) and [compliance checklist](docs/hackathon/compliance-checklist.md). Technical architecture is in [docs/technical/architecture.md](docs/technical/architecture.md), with editable [Mermaid source](docs/technical/architecture.mmd). Plain-language product and workflow guides are under [docs/user](docs/user/).
 
 ## Quick start
 
