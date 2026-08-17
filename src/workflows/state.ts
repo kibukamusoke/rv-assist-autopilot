@@ -29,8 +29,15 @@ export const workflowStateSchema = z.object({
   qualification: qualificationSchema.optional(),
   qualificationTrace: z
     .object({
-      source: z.enum(['deterministic', 'gemini', 'deterministic-fallback']),
+      source: z.enum(['deterministic', 'gemini', 'adk-gemini', 'deterministic-fallback']),
+      framework: z.literal('google-adk').optional(),
+      agentName: z.string().optional(),
       model: z.string().optional(),
+      modelVersion: z.string().optional(),
+      toolCalls: z.array(z.string()).optional(),
+      tokenCount: z.number().int().nonnegative().optional(),
+      decisionSummary: z.string().optional(),
+      evidence: z.array(z.string()).optional(),
       fallbackReason: z.string().optional(),
       durationMs: z.number().nonnegative(),
     })

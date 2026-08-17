@@ -8,7 +8,7 @@ The following example uses synthetic data.
 
 ## What Autopilot does
 
-1. **Understands the problem.** It identifies an HVAC issue, high urgency, Phoenix-area location, and a vulnerable-occupant safety flag.
+1. **Understands the problem.** Gemini, coordinated by Google ADK, identifies an HVAC issue, high urgency, Phoenix-area location, and a vulnerable-occupant safety flag. A separate rule-based safety check is always applied as a guardrail.
 2. **Finds eligible technicians.** It checks specialty, service area, verification, availability, rating, and response reliability.
 3. **Ranks candidates.** The best eligible candidate is contacted first, with visible reasons for the ranking.
 4. **Waits reliably.** A durable deadline is scheduled. The system does not need to stay running while it waits.
@@ -16,6 +16,8 @@ The following example uses synthetic data.
 6. **Verifies the match.** An acceptance is recorded before the workflow asks the customer to confirm.
 7. **Completes safely.** Only after customer confirmation does Autopilot create the external job through its adapter.
 8. **Explains the outcome.** A chronological timeline shows what happened and why.
+
+For every AI-assisted qualification, the timeline can show which agent and model ran, which approved tool it used, a short decision summary, supporting evidence, processing time, and whether the safe rule-based fallback was needed. It does not reveal private model chain-of-thought.
 
 ## Possible outcomes
 

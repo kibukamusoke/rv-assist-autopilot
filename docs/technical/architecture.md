@@ -6,7 +6,7 @@ This repository owns only the Autopilot agent, workflow, adapters, and deploymen
 
 ## Responsibility split
 
-Gemini and Google ADK interpret language, invoke narrow tools, and recommend plans. Deterministic TypeScript validates eligibility, ranks by explicit inputs, enforces state transitions, performs idempotency checks, and blocks confirmed-job creation until a technician acceptance exists.
+Gemini and Google ADK interpret language, invoke the narrow deterministic safety-baseline tool, and return a schema-constrained qualification with a concise decision summary and evidence. Deterministic TypeScript re-applies safety invariants, validates eligibility, ranks by explicit inputs, enforces state transitions, performs idempotency checks, and blocks confirmed-job creation until a technician acceptance exists.
 
 Cloud Run exposes the request API and receives authenticated Pub/Sub and Cloud Tasks pushes. Pub/Sub carries resumable external workflow events. Cloud Tasks dispatches technician-response deadlines at their scheduled time instead of using delivery failures as a timer. Firestore stores durable workflow state with optimistic version checks. Local in-memory implementations preserve the same contracts for repeatable judge runs.
 
@@ -41,4 +41,6 @@ The workflow implements decline/timeout failover, verified technician acceptance
 
 ## Qualification modes
 
-The default deterministic qualifier makes local judging reproducible. Optional Gemini qualification uses structured JSON output and stores source, model, latency, and fallback reason alongside workflow state. The deterministic safety detector is a non-bypassable guard: its hazard flags are merged into Gemini results before outreach decisions.
+The default local qualifier is deterministic so credential-free judging remains reproducible. The deployed qualifier runs Gemini 2.5 Flash through Google ADK and Vertex AI. It stores the framework, agent, requested and resolved model versions when available, tool calls, token count, latency, safe decision summary, evidence, and fallback reason alongside workflow state. Hidden model reasoning is never requested or exposed.
+
+The ADK agent must call `calculate_safety_baseline`. Its final response must pass a Zod schema. Application code then independently recomputes and merges the deterministic safety flags, making that guard non-bypassable. Any timeout, model/API error, invalid structured response, or missing required tool call activates deterministic fallback instead of failing the workflow.

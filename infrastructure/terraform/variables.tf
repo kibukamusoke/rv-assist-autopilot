@@ -20,3 +20,9 @@ variable "image" {
     error_message = "image must be null for bootstrap or an immutable image reference ending in @sha256:<64 lowercase hex characters>."
   }
 }
+
+variable "gemini_model" {
+  description = "Vertex AI Gemini model used by the live Google ADK qualification agent."
+  type        = string
+  default     = "gemini-2.5-flash"
+}

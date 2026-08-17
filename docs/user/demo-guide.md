@@ -8,12 +8,13 @@
 
 1. Submit the synthetic Phoenix air-conditioning request.
 2. Show the qualification: HVAC, high urgency, and vulnerable occupant.
-3. Show the ranked technicians and the reasons behind each score.
-4. Record the first technician declining.
-5. Show Autopilot automatically advancing to the second technician.
-6. Record the second technician accepting.
-7. Confirm as the customer.
-8. Open the final timeline and point to the mock external job ID.
+3. Show the `adk-gemini` trace: required safety tool, decision summary, evidence, token count, and no fallback.
+4. Show the ranked technicians and the reasons behind each score.
+5. Record the first technician declining.
+6. Show Autopilot automatically advancing to the second technician.
+7. Record the second technician accepting.
+8. Confirm as the customer.
+9. Open the final timeline and point to the mock external job ID.
 
 ## What to emphasize
 
@@ -23,6 +24,7 @@
 - Pub/Sub accepts asynchronous workflow events.
 - The deployed demonstration is independent of private NicheWave access.
 - Consequential decisions remain deterministic and auditable even when Gemini assists with language understanding.
+- If Gemini fails, the trace visibly reports deterministic fallback and the workflow remains safe.
 
 ## What not to claim
 

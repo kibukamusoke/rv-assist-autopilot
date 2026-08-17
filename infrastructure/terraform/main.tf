@@ -2,6 +2,7 @@ locals {
   service_name   = "rv-assist-autopilot"
   deploy_service = var.image != null
   required_apis = toset([
+    "aiplatform.googleapis.com",
     "artifactregistry.googleapis.com",
     "cloudtasks.googleapis.com",
     "firestore.googleapis.com",
@@ -81,7 +82,27 @@ resource "google_cloud_run_v2_service" "autopilot" {
       }
       env {
         name  = "QUALIFIER_MODE"
-        value = "deterministic"
+        value = "adk"
+      }
+      env {
+        name  = "GEMINI_MODEL"
+        value = var.gemini_model
+      }
+      env {
+        name  = "GEMINI_TIMEOUT_MS"
+        value = "15000"
+      }
+      env {
+        name  = "GOOGLE_GENAI_USE_VERTEXAI"
+        value = "true"
+      }
+      env {
+        name  = "GOOGLE_CLOUD_PROJECT"
+        value = var.project_id
+      }
+      env {
+        name  = "GOOGLE_CLOUD_LOCATION"
+        value = "global"
       }
       env {
         name  = "PUBSUB_WORKFLOW_TOPIC"
@@ -109,7 +130,10 @@ resource "google_cloud_run_v2_service" "autopilot" {
       max_instance_count = 5
     }
   }
-  depends_on = [google_project_service.required]
+  depends_on = [
+    google_project_iam_member.runtime_vertex_ai,
+    google_project_service.required,
+  ]
 }
 
 resource "google_cloud_run_v2_service_iam_member" "pubsub_invoker" {
@@ -145,6 +169,14 @@ resource "google_project_iam_member" "runtime_cloud_tasks" {
   project = var.project_id
   role    = "roles/cloudtasks.enqueuer"
   member  = "serviceAccount:${google_service_account.runtime.email}"
+}
+
+resource "google_project_iam_member" "runtime_vertex_ai" {
+  project = var.project_id
+  role    = "roles/aiplatform.user"
+  member  = "serviceAccount:${google_service_account.runtime.email}"
+
+  depends_on = [google_project_service.required["aiplatform.googleapis.com"]]
 }
 
 resource "google_service_account_iam_member" "cloud_tasks_service_agent_user" {

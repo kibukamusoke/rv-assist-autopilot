@@ -7,13 +7,13 @@ An asynchronous AI operator for the **All Things Agentic Hackathon — Taskmaste
 
 ## What this scaffold proves
 
-- Google ADK defines the Gemini-powered orchestrator and its typed tools.
+- Google ADK runs live Gemini request qualification with typed tools and structured output.
 - A deterministic workflow engine owns consequential state transitions and prevents unconfirmed bookings.
 - Firestore, Pub/Sub, and Cloud Tasks have production adapters; in-memory implementations make local runs credential-free.
 - A synthetic NicheWave adapter lets judges run the workflow without private platform access.
 - Cloud Run packaging and Terraform establish the deployment path without hiding infrastructure decisions.
 
-The initial slice intentionally stops short of live outreach and production booking logic. It establishes the architecture, contracts, state model, runnable mock path, and evaluation seams first.
+The current hackathon slice intentionally stops short of contacting real technicians or writing production NicheWave bookings. It establishes live ADK/Gemini qualification, durable orchestration, safety and confirmation gates, runnable synthetic demonstrations, and measurable evaluation seams first.
 
 ## Architecture
 
@@ -95,7 +95,9 @@ npm run adk:run
 npm run adk:web
 ```
 
-To use Gemini structured qualification in the HTTP workflow, set `QUALIFIER_MODE=gemini` and configure either `GOOGLE_API_KEY` or the Vertex AI variables. Model output is schema-validated and recorded with model/latency provenance. Timeouts, invalid JSON, and API errors fall back to the deterministic qualifier; deterministic hazard flags are always retained.
+To run the production-style ADK path locally, set `QUALIFIER_MODE=adk` and configure either `GOOGLE_GENAI_API_KEY` or the Vertex AI variables. Model output is schema-validated and the workflow records the ADK agent, model/version, tool calls, token count, latency, decision summary, and grounded evidence. Timeouts, invalid output, skipped safety-tool calls, and API errors fall back to the deterministic qualifier; deterministic hazard flags are always retained.
+
+`QUALIFIER_MODE=gemini` remains available as a lower-level Gemini SDK comparison path and uses `GOOGLE_API_KEY`. The deployed service uses `QUALIFIER_MODE=adk` with Vertex AI and Application Default Credentials—no model API key is stored in Cloud Run.
 
 The normal mock demo is deterministic by design. Gemini is used for language understanding and planning through ADK; code remains authoritative for eligibility filters, state transitions, idempotency, and booking safety.
 
@@ -109,6 +111,7 @@ The normal mock demo is deterministic by design. Gemini is used for language und
 | `npm test`                | Run unit and integration tests once                     |
 | `npm run test:watch`      | Run tests in watch mode                                 |
 | `npm run eval`            | Run the 10-scenario metric and recovery evaluation      |
+| `npm run eval:adk:live`   | Run the 10-scenario live ADK/Gemini evaluation          |
 | `npm run lint`            | Run ESLint                                              |
 | `npm run typecheck`       | Type-check without emitting                             |
 | `npm run build`           | Compile production JavaScript into `dist/`              |

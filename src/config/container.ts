@@ -16,6 +16,10 @@ import {
   GeminiRequestQualifier,
   GoogleGenAiStructuredGenerator,
 } from '../agents/gemini-request-qualifier.js';
+import {
+  AdkRequestQualifier,
+  InMemoryAdkQualificationRunner,
+} from '../agents/adk-request-qualifier.js';
 
 export function createWorkflowEngine(environment: Environment): WorkflowEngine {
   if (environment.NICHEWAVE_ADAPTER !== 'mock') {
@@ -54,6 +58,17 @@ function createCloudTasksScheduler(environment: Environment): WorkflowScheduler 
 function createRequestQualifier(environment: Environment): RequestQualifier {
   const fallback = new DeterministicRequestQualifier();
   if (environment.QUALIFIER_MODE === 'deterministic') return fallback;
+  if (environment.QUALIFIER_MODE === 'adk') {
+    if (!environment.GOOGLE_GENAI_USE_VERTEXAI && !environment.GOOGLE_GENAI_API_KEY) {
+      throw new Error('GOOGLE_GENAI_API_KEY is required when QUALIFIER_MODE=adk without Vertex AI');
+    }
+    return new AdkRequestQualifier(
+      new InMemoryAdkQualificationRunner(environment.GEMINI_MODEL),
+      environment.GEMINI_MODEL,
+      fallback,
+      environment.GEMINI_TIMEOUT_MS,
+    );
+  }
 
   const client = environment.GOOGLE_GENAI_USE_VERTEXAI
     ? createVertexClient(environment)

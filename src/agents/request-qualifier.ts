@@ -2,8 +2,15 @@ import type { Qualification, RepairRequest } from '../domain/request.js';
 import { qualifyRequest } from '../tools/qualify-request.js';
 
 export interface QualificationTrace {
-  source: 'deterministic' | 'gemini' | 'deterministic-fallback';
+  source: 'deterministic' | 'gemini' | 'adk-gemini' | 'deterministic-fallback';
+  framework?: 'google-adk';
+  agentName?: string;
   model?: string;
+  modelVersion?: string;
+  toolCalls?: string[];
+  tokenCount?: number;
+  decisionSummary?: string;
+  evidence?: string[];
   fallbackReason?: string;
   durationMs: number;
 }
