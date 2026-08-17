@@ -50,7 +50,8 @@ Provide a concise decisionSummary and up to five short evidence statements based
 Return only the required structured result. Do not reveal hidden reasoning or chain-of-thought.`,
       tools: [safetyBaseline],
       outputSchema: agentOutputSchema,
-      generateContentConfig: { temperature: 0.1 },
+      disallowTransferToParent: true,
+      disallowTransferToPeers: true,
     });
     this.runner = new InMemoryRunner({ appName: 'rv-assist-autopilot', agent });
   }

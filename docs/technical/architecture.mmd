@@ -3,7 +3,7 @@ flowchart LR
     Client["Customer / demo client"] --> API["Cloud Run API"]
     API --> Workflow["Deterministic workflow engine"]
     Workflow --> ADK["Google ADK qualification agent"]
-    ADK --> Gemini["Gemini 2.5 Flash on Vertex AI"]
+    ADK --> Gemini["Latest stable Gemini Flash on Vertex AI"]
     ADK --> Safety["Deterministic safety baseline tool"]
     ADK --> Trace["Structured decision and trace evidence"]
     Workflow --> Tools["Eligibility and ranking tools"]

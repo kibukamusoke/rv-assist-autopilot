@@ -9,7 +9,7 @@ const environmentSchema = z.object({
   WORKFLOW_SCHEDULER: z.enum(['memory', 'cloud-tasks']).default('memory'),
   NICHEWAVE_ADAPTER: z.enum(['mock', 'http']).default('mock'),
   QUALIFIER_MODE: z.enum(['deterministic', 'gemini', 'adk']).default('deterministic'),
-  GEMINI_MODEL: z.string().default('gemini-2.5-flash'),
+  GEMINI_MODEL: z.string().default('gemini-3.6-flash'),
   GEMINI_TIMEOUT_MS: z.coerce.number().int().positive().default(8000),
   GOOGLE_API_KEY: z.string().optional(),
   GOOGLE_GENAI_API_KEY: z.string().optional(),

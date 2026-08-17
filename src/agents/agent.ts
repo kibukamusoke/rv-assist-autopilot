@@ -8,7 +8,7 @@ const nicheWave = new MockNicheWaveAdapter();
 export const rootAgent = new LlmAgent({
   name: 'rv_assist_autopilot',
   description: 'Qualifies RV repair requests and plans safe technician matching workflows.',
-  model: process.env.GEMINI_MODEL ?? 'gemini-2.5-flash',
+  model: process.env.GEMINI_MODEL ?? 'gemini-3.6-flash',
   instruction: `You are RV Assist Autopilot, an operations agent for RV repair requests.
 Use tools to qualify requests, search only eligible technicians, and rank candidates.
 Never invent availability, acceptance, an ETA, or a confirmed booking.

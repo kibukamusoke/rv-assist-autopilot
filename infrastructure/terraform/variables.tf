@@ -24,5 +24,5 @@ variable "image" {
 variable "gemini_model" {
   description = "Vertex AI Gemini model used by the live Google ADK qualification agent."
   type        = string
-  default     = "gemini-2.5-flash"
+  default     = "gemini-3.6-flash"
 }

@@ -21,11 +21,11 @@ With Google Cloud Application Default Credentials:
 GOOGLE_GENAI_USE_VERTEXAI=true \
 GOOGLE_CLOUD_PROJECT=rv-assist-autopilot \
 GOOGLE_CLOUD_LOCATION=global \
-GEMINI_MODEL=gemini-2.5-flash \
+GEMINI_MODEL=gemini-3.6-flash \
 npm run eval:adk:live
 ```
 
-This is intentionally separate from `npm run check` because it makes billable, nondeterministic external calls. It requires at least 90% category and urgency accuracy, 100% required-tool use, 100% structured responses, and zero fallbacks over ten synthetic scenarios. On 2026-08-17 the deployed model achieved 100% on every percentage metric with zero fallbacks.
+This is intentionally separate from `npm run check` because it makes billable, nondeterministic external calls. It requires at least 90% category and urgency accuracy, 100% required-tool use, 100% structured responses, and zero fallbacks over ten synthetic scenarios. On 2026-08-17 both the Gemini 2.5 baseline and the promoted Gemini 3.6 Flash model achieved 100% on every percentage metric with zero fallbacks. The deployment history identifies the active model and image digest.
 
 ## Infrastructure verification
 

@@ -12,8 +12,8 @@ Checkboxes represent the current repository state, not permanent facts. Re-check
 - [ ] Confirm the submission opening and closing timestamps and timezone.
 - [ ] Confirm participant, team-size, geography, age, account, and legal eligibility.
 - [ ] Confirm the permitted project-development period and treatment of pre-existing work.
-- [ ] Confirm whether Gemini 3.5 is mandatory, preferred, or promotional.
-- [ ] Record the exact eligible Gemini 3.5 model identifier and lifecycle stage.
+- [ ] Confirm whether the public Gemini 3.5 reference is mandatory, preferred, or promotional.
+- [ ] Confirm that using the latest stable Gemini model is permitted by the official rules.
 - [ ] Confirm required Google products, APIs, or sponsor technologies.
 - [ ] Record every mandatory submission field and artifact.
 
@@ -53,9 +53,11 @@ Do not mark the submission ready while any item in this section remains unchecke
 - [x] Firestore provides durable state.
 - [x] Pub/Sub accepts asynchronous events.
 - [x] Cloud Tasks provides exact response deadlines.
-- [ ] Resolve the provisional Gemini 3.5 requirement; current deployment uses Gemini 2.5 Flash.
-- [ ] Run the full offline and live eval suites against the confirmed competition model.
-- [ ] Deploy the confirmed model by immutable image digest and verify a no-drift Terraform plan.
+- [x] Select the latest stable general-purpose Gemini candidate: `gemini-3.6-flash` as of 2026-08-17.
+- [ ] Confirm that the official rules permit the selected latest stable model.
+- [x] Run the full offline and live eval suites against the latest stable model candidate.
+- [x] Deploy the latest stable candidate by immutable image digest and verify a no-drift Terraform plan.
+- [ ] Repeat model verification if the official rules mandate a different competition model.
 
 ## E. Safety, reliability, and evidence
 

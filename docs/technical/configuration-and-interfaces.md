@@ -13,7 +13,7 @@ Local development defaults to in-memory state, an in-memory scheduler, determini
 | `WORKFLOW_SCHEDULER`        | Deadline scheduler                        | `cloud-tasks`                                 |
 | `NICHEWAVE_ADAPTER`         | External platform adapter                 | `mock`                                        |
 | `QUALIFIER_MODE`            | Request qualification implementation      | `adk`                                         |
-| `GEMINI_MODEL`              | ADK model                                 | `gemini-2.5-flash`                            |
+| `GEMINI_MODEL`              | ADK model                                 | `gemini-3.6-flash`                            |
 | `GEMINI_TIMEOUT_MS`         | Qualification deadline                    | `15000`                                       |
 | `GOOGLE_GENAI_USE_VERTEXAI` | Select Vertex AI backend                  | `true`                                        |
 | `GOOGLE_CLOUD_PROJECT`      | Vertex AI project                         | `rv-assist-autopilot`                         |

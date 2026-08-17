@@ -41,6 +41,6 @@ The workflow implements decline/timeout failover, verified technician acceptance
 
 ## Qualification modes
 
-The default local qualifier is deterministic so credential-free judging remains reproducible. The deployed qualifier runs Gemini 2.5 Flash through Google ADK and Vertex AI. It stores the framework, agent, requested and resolved model versions when available, tool calls, token count, latency, safe decision summary, evidence, and fallback reason alongside workflow state. Hidden model reasoning is never requested or exposed.
+The default local qualifier is deterministic so credential-free judging remains reproducible. The deployed qualifier runs the latest stable general-purpose Gemini Flash model through Google ADK and Vertex AI. The configured submission candidate is Gemini 3.6 Flash. It stores the framework, agent, requested and resolved model versions when available, tool calls, token count, latency, safe decision summary, evidence, and fallback reason alongside workflow state. Hidden model reasoning is never requested or exposed.
 
 The ADK agent must call `calculate_safety_baseline`. Its final response must pass a Zod schema. Application code then independently recomputes and merges the deterministic safety flags, making that guard non-bypassable. Any timeout, model/API error, invalid structured response, or missing required tool call activates deterministic fallback instead of failing the workflow.

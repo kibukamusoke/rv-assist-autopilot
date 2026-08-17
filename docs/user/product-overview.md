@@ -16,7 +16,7 @@ An RV owner may be stranded, dealing with extreme heat, or caring for vulnerable
 - Advances automatically when a technician declines or times out.
 - Requires technician acceptance and customer confirmation before creating a job.
 - Preserves a readable timeline for explanation and review.
-- Uses Google ADK and Gemini in the live service while preserving a rule-based safety fallback.
+- Uses Google ADK and the latest stable general-purpose Gemini Flash model in the live service while preserving a rule-based safety fallback.
 - Runs independently with synthetic data so judges do not need access to NicheWave.
 
 ## What remains simulated

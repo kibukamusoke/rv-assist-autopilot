@@ -28,7 +28,6 @@ export class GoogleGenAiStructuredGenerator implements StructuredGenerator {
       config: {
         responseMimeType: 'application/json',
         responseJsonSchema: input.jsonSchema,
-        temperature: 0.1,
         abortSignal: input.abortSignal,
       },
     });

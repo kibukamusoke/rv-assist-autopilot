@@ -2,6 +2,17 @@
 
 This is an operational record, not a substitute for Git history. Add an entry for each deployed application digest or infrastructure change.
 
+## 2026-08-17 — Gemini 3.6 Flash promotion
+
+- Project: `rv-assist-autopilot`
+- Region: Cloud Run and Firestore in `us-west4`; Vertex AI global endpoint.
+- Image: `app@sha256:694b275a4ee25e7931a51020090dea14a56c636bedc82035049eef1d5d9e0fa6` (Apple Container amd64 build).
+- Infrastructure: changed `GEMINI_MODEL` from `gemini-2.5-flash` to the latest GA general-purpose Flash model, `gemini-3.6-flash`; Cloud Run updated in place with 0 add, 1 change, 0 destroy.
+- Application: removed custom sampling temperature, which Gemini 3.6 does not support, and made ADK transfer restrictions explicit for the structured-output qualification agent.
+- Verification: 19 tests passed; offline 10-scenario eval remained 100% with zero unsafe actions; live 10-scenario Gemini 3.6 ADK eval achieved 100% category accuracy, urgency accuracy, required-tool use, and structured responses with zero fallbacks.
+- Live trace: synthetic workflow `gemini36-live-20260817-001` returned `adk-gemini`, requested `gemini-3.6-flash`, invoked `calculate_safety_baseline`, and advanced to `AWAITING_RESPONSE` without fallback.
+- Final Terraform plan: no changes.
+
 ## 2026-08-17 — Live Google ADK and Gemini qualification
 
 - Project: `rv-assist-autopilot`
