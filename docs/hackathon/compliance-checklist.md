@@ -39,8 +39,8 @@ Do not mark the submission ready while any item in this section remains unchecke
 - [x] It supports human escalation.
 - [x] It requires technician acceptance and customer confirmation before job creation.
 - [x] Duplicate/replayed callbacks are idempotent.
-- [ ] Add concrete outreach delivery through a typed mock/production adapter rather than recording only a contact state.
-- [ ] Capture one complete deployed ADK workflow from intake through mock job completion.
+- [x] Add concrete synthetic outreach delivery through a typed adapter with auditable delivery evidence.
+- [x] Capture one complete deployed ADK workflow from intake through mock job completion (`outreach-live-20260817-001`).
 - [ ] Map each behavior to the exact official Taskmaster scoring criterion.
 
 ## D. Required technology

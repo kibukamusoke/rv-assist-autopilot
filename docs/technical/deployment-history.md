@@ -2,6 +2,17 @@
 
 This is an operational record, not a substitute for Git history. Add an entry for each deployed application digest or infrastructure change.
 
+## 2026-08-17 — Auditable synthetic outreach
+
+- Project: `rv-assist-autopilot`
+- Region: Cloud Run and Firestore in `us-west4`; Vertex AI global endpoint.
+- Cloud Run URL: `https://rv-assist-autopilot-avakk2nf7a-wn.a.run.app`
+- Image: `app@sha256:681e05473cc192193dc000685d6880322f0e0048ec2229b0e766ffd2365e9f84` (`linux/amd64`, published by Google Cloud Build after the Apple Container registry push stalled without creating a tag).
+- Infrastructure: added `OUTREACH_ADAPTER=mock`; Cloud Run updated in place with 0 add, 1 change, 0 destroy.
+- Application: introduced a typed outreach boundary and deterministic mock implementation; technician and customer delivery attempts now persist delivery IDs, recipients, channel, status, timestamps, idempotency keys, and technician response deadlines. Delivery failure safely retries the next candidate or escalates.
+- Verification: 21 tests passed; TypeScript, lint, formatting, build, and Terraform validation passed; the offline 10-scenario evaluation remained 100% with zero unsafe autonomous actions.
+- Live trace: synthetic workflow `outreach-live-20260817-001` used Google ADK with `gemini-3.6-flash`, invoked `calculate_safety_baseline`, delivered outreach to the first technician, replanned after a decline, delivered to the second technician, recorded acceptance, delivered the customer notification, received confirmation, and completed mock job `mock-job-outreach-live-20260817-001`.
+
 ## 2026-08-17 — Gemini 3.6 Flash promotion
 
 - Project: `rv-assist-autopilot`

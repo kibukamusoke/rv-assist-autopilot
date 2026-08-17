@@ -81,6 +81,10 @@ resource "google_cloud_run_v2_service" "autopilot" {
         value = "mock"
       }
       env {
+        name  = "OUTREACH_ADAPTER"
+        value = "mock"
+      }
+      env {
         name  = "QUALIFIER_MODE"
         value = "adk"
       }

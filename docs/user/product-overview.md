@@ -14,6 +14,7 @@ An RV owner may be stranded, dealing with extreme heat, or caring for vulnerable
 - Detects urgency and safety concerns.
 - Finds and ranks synthetic technician records.
 - Advances automatically when a technician declines or times out.
+- Records synthetic technician and customer outreach with delivery IDs, timestamps, status, and duplicate protection.
 - Requires technician acceptance and customer confirmation before creating a job.
 - Preserves a readable timeline for explanation and review.
 - Uses Google ADK and the latest stable general-purpose Gemini Flash model in the live service while preserving a rule-based safety fallback.
@@ -21,7 +22,7 @@ An RV owner may be stranded, dealing with extreme heat, or caring for vulnerable
 
 ## What remains simulated
 
-The current deployment uses a mock NicheWave adapter. Technician records and the final external job ID are synthetic. It does not message real technicians or create a job in the pre-existing NicheWave/RV Assist platform.
+The current deployment uses mock NicheWave and outreach adapters. Technician records, message deliveries, and the final external job ID are synthetic. It does not message real technicians or customers and does not create a job in the pre-existing NicheWave/RV Assist platform.
 
 ## Product boundary
 

@@ -12,6 +12,7 @@ Local development defaults to in-memory state, an in-memory scheduler, determini
 | `EVENT_BUS`                 | General workflow event ingress mode       | `pubsub`                                      |
 | `WORKFLOW_SCHEDULER`        | Deadline scheduler                        | `cloud-tasks`                                 |
 | `NICHEWAVE_ADAPTER`         | External platform adapter                 | `mock`                                        |
+| `OUTREACH_ADAPTER`          | Technician/customer delivery adapter      | `mock`                                        |
 | `QUALIFIER_MODE`            | Request qualification implementation      | `adk`                                         |
 | `GEMINI_MODEL`              | ADK model                                 | `gemini-3.6-flash`                            |
 | `GEMINI_TIMEOUT_MS`         | Qualification deadline                    | `15000`                                       |
@@ -44,10 +45,11 @@ Cloud Run remains private. Pub/Sub and Cloud Tasks use the dedicated invoker ser
 ## Core adapter contracts
 
 - `NicheWaveAdapter`: technician search and confirmed-job creation.
+- `OutreachAdapter`: idempotent technician/customer message delivery and delivery evidence.
 - `WorkflowStore`: durable state retrieval and optimistic-version writes.
 - `WorkflowScheduler`: exact future delivery of technician-response deadlines.
 - `RequestQualifier`: deterministic, lower-level Gemini SDK, or Google ADK/Gemini request understanding.
 
 The runtime service account has `roles/aiplatform.user`. ADK uses its Cloud Run identity through Application Default Credentials, so production has no Gemini API-key secret. The ADK qualifier must call `calculate_safety_baseline`; a missing call invalidates the run and activates deterministic fallback.
 
-The mock adapter and in-memory implementations must remain available so local tests and judge demos do not require cloud credentials or private platform access.
+The mock adapters and in-memory implementations must remain available so local tests and judge demos do not require cloud credentials, private platform access, or real technician/customer contact. Synthetic delivery records must never be described as SMS or email actually sent to a person.

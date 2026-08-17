@@ -11,6 +11,7 @@ An asynchronous AI operator for the **All Things Agentic Hackathon — Taskmaste
 - A deterministic workflow engine owns consequential state transitions and prevents unconfirmed bookings.
 - Firestore, Pub/Sub, and Cloud Tasks have production adapters; in-memory implementations make local runs credential-free.
 - A synthetic NicheWave adapter lets judges run the workflow without private platform access.
+- A synthetic outreach adapter produces auditable technician and customer delivery evidence without sending real messages.
 - Cloud Run packaging and Terraform establish the deployment path without hiding infrastructure decisions.
 
 The current hackathon slice intentionally stops short of contacting real technicians or writing production NicheWave bookings. It establishes live ADK/Gemini qualification, durable orchestration, safety and confirmation gates, runnable synthetic demonstrations, and measurable evaluation seams first.
@@ -138,7 +139,7 @@ src/
   agents/          Google ADK agent definition and tool wiring
   tools/           Small typed capabilities exposed to the agent
   workflows/       Durable state model and deterministic transitions
-  adapters/        NicheWave, state-store, event-ingress, and scheduler boundaries
+  adapters/        NicheWave, outreach, state-store, event-ingress, and scheduler boundaries
   domain/          Shared schemas and domain types
   api/             Cloud Run HTTP handlers
 infrastructure/    Terraform and deployment notes

@@ -1,6 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import type { WorkflowMessage } from '../adapters/events/event-publisher.js';
 import type { NicheWaveAdapter } from '../adapters/nichewave/nichewave-adapter.js';
+import { MockOutreachAdapter } from '../adapters/outreach/mock-outreach-adapter.js';
+import type { OutreachAdapter, OutreachDelivery } from '../adapters/outreach/outreach-adapter.js';
 import type { WorkflowScheduler } from '../adapters/scheduling/workflow-scheduler.js';
 import type { WorkflowStore } from '../adapters/state/workflow-store.js';
 import {
@@ -22,6 +24,7 @@ export class WorkflowEngine {
     private readonly now: () => Date = () => new Date(),
     private readonly qualifier: RequestQualifier = new DeterministicRequestQualifier(),
     private readonly responseTimeoutMs = 15 * 60 * 1000,
+    private readonly outreach: OutreachAdapter = new MockOutreachAdapter(),
   ) {}
 
   async start(request: RepairRequest): Promise<WorkflowState> {
@@ -67,9 +70,9 @@ export class WorkflowEngine {
       return state;
     }
 
-    const resultState = this.beginOutreach(state, 0);
+    const resultState = await this.beginOutreach(state, 0);
     await this.store.save(resultState);
-    await this.scheduleResponseDue(resultState);
+    if (resultState.status === 'AWAITING_RESPONSE') await this.scheduleResponseDue(resultState);
     return resultState;
   }
 
@@ -114,7 +117,7 @@ export class WorkflowEngine {
     let next = this.appendEvent(current, 'TECHNICIAN_TIMED_OUT', {
       technicianId: current.candidates[message.candidateIndex]?.id,
     });
-    next = this.moveToNextCandidate(next, message.idempotencyKey);
+    next = await this.moveToNextCandidate(next, message.idempotencyKey);
     await this.store.save(next, current.version);
     if (next.status === 'AWAITING_RESPONSE') await this.scheduleResponseDue(next);
     return next;
@@ -136,7 +139,7 @@ export class WorkflowEngine {
       respondedAt: message.respondedAt,
     });
     if (message.response === 'declined') {
-      next = this.moveToNextCandidate(next, message.idempotencyKey);
+      next = await this.moveToNextCandidate(next, message.idempotencyKey);
       await this.store.save(next, current.version);
       if (next.status === 'AWAITING_RESPONSE') await this.scheduleResponseDue(next);
       return next;
@@ -144,7 +147,33 @@ export class WorkflowEngine {
 
     next.technicianAcceptedAt = message.respondedAt;
     next = this.transition(next, 'MATCH_FOUND', { technicianId: message.technicianId });
-    next = this.transition(next, 'CUSTOMER_CONFIRMATION');
+    try {
+      const customerDelivery = await this.outreach.send({
+        workflowId: current.id,
+        audience: 'customer',
+        recipientId: current.request.customerId,
+        message: `${candidate.businessName} accepted the repair request. Please confirm this match.`,
+        requestedAt: this.now().toISOString(),
+        idempotencyKey: `${current.id}:customer-confirmation-outreach`,
+      });
+      next = this.recordDelivery(
+        next,
+        customerDelivery.status === 'delivered' ? 'CUSTOMER_CONTACTED' : 'CUSTOMER_CONTACT_FAILED',
+        customerDelivery,
+      );
+      if (customerDelivery.status === 'delivered') {
+        next = this.transition(next, 'CUSTOMER_CONFIRMATION');
+        next = this.withProcessedKey(next, message.idempotencyKey);
+        await this.store.save(next, current.version);
+        return next;
+      }
+    } catch (error) {
+      next = this.appendEvent(next, 'CUSTOMER_CONTACT_FAILED', {
+        customerId: current.request.customerId,
+        reason: error instanceof Error ? error.message.slice(0, 160) : 'unknown outreach error',
+      });
+    }
+    next = this.transition(next, 'HUMAN_ESCALATION', { reason: 'customer-contact-failed' });
     next = this.withProcessedKey(next, message.idempotencyKey);
     await this.store.save(next, current.version);
     return next;
@@ -186,7 +215,10 @@ export class WorkflowEngine {
     return next;
   }
 
-  private moveToNextCandidate(state: WorkflowState, processedKey: string): WorkflowState {
+  private async moveToNextCandidate(
+    state: WorkflowState,
+    processedKey: string,
+  ): Promise<WorkflowState> {
     const nextIndex = (state.currentCandidateIndex ?? -1) + 1;
     if (nextIndex >= state.candidates.length) {
       return this.withProcessedKey(
@@ -194,20 +226,56 @@ export class WorkflowEngine {
         processedKey,
       );
     }
-    return this.withProcessedKey(this.beginOutreach(state, nextIndex), processedKey);
+    return this.withProcessedKey(await this.beginOutreach(state, nextIndex), processedKey);
   }
 
-  private beginOutreach(state: WorkflowState, candidateIndex: number): WorkflowState {
-    let next = this.transition(
-      { ...state, currentCandidateIndex: candidateIndex },
-      'CONTACTING_TECHNICIAN',
-      {
-        technicianId: state.candidates[candidateIndex]?.id,
-        candidateIndex,
-      },
-    );
-    next = this.transition(next, 'AWAITING_RESPONSE');
-    return next;
+  private async beginOutreach(
+    state: WorkflowState,
+    candidateIndex: number,
+  ): Promise<WorkflowState> {
+    let next = state;
+    for (let index = candidateIndex; index < state.candidates.length; index += 1) {
+      const candidate = state.candidates[index];
+      if (!candidate) continue;
+      next = this.transition({ ...next, currentCandidateIndex: index }, 'CONTACTING_TECHNICIAN', {
+        technicianId: candidate.id,
+        candidateIndex: index,
+      });
+      const dueAt = new Date(this.now().getTime() + this.responseTimeoutMs).toISOString();
+      try {
+        const delivery = await this.outreach.send({
+          workflowId: state.id,
+          audience: 'technician',
+          recipientId: candidate.id,
+          message: `${state.qualification?.summary ?? state.request.description} Urgency: ${state.qualification?.urgency ?? 'unknown'}.`,
+          requestedAt: this.now().toISOString(),
+          responseDueAt: dueAt,
+          idempotencyKey: `${state.id}:${index}:technician-outreach`,
+        });
+        next = this.recordDelivery(
+          next,
+          delivery.status === 'delivered' ? 'TECHNICIAN_CONTACTED' : 'TECHNICIAN_CONTACT_FAILED',
+          delivery,
+          { responseDueAt: dueAt },
+        );
+        if (delivery.status === 'delivered') return this.transition(next, 'AWAITING_RESPONSE');
+      } catch (error) {
+        next = this.appendEvent(next, 'TECHNICIAN_CONTACT_FAILED', {
+          technicianId: candidate.id,
+          reason: error instanceof Error ? error.message.slice(0, 160) : 'unknown outreach error',
+        });
+      }
+    }
+    return this.transition(next, 'HUMAN_ESCALATION', { reason: 'outreach-delivery-failed' });
+  }
+
+  private recordDelivery(
+    state: WorkflowState,
+    eventType: string,
+    delivery: OutreachDelivery,
+    details: Record<string, unknown> = {},
+  ): WorkflowState {
+    return this.appendEvent(state, eventType, { ...delivery, ...details });
   }
 
   private async scheduleResponseDue(state: WorkflowState): Promise<void> {

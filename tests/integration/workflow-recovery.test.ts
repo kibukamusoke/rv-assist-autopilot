@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import request from '../../samples/urgent-ac-request.json' with { type: 'json' };
 import type { WorkflowMessage } from '../../src/adapters/events/event-publisher.js';
 import { MockNicheWaveAdapter } from '../../src/adapters/nichewave/mock-nichewave-adapter.js';
+import { MockOutreachAdapter } from '../../src/adapters/outreach/mock-outreach-adapter.js';
 import { InMemoryWorkflowScheduler } from '../../src/adapters/scheduling/in-memory-workflow-scheduler.js';
 import { InMemoryWorkflowStore } from '../../src/adapters/state/in-memory-workflow-store.js';
 import { repairRequestSchema } from '../../src/domain/request.js';
@@ -11,13 +12,23 @@ function createHarness() {
   let nowMs = Date.parse('2026-08-17T10:00:01.000Z');
   const events = new InMemoryWorkflowScheduler();
   const nicheWave = new MockNicheWaveAdapter();
+  const outreach = new MockOutreachAdapter();
   const engine = new WorkflowEngine(
     new InMemoryWorkflowStore(),
     nicheWave,
     events,
     () => new Date(nowMs),
+    undefined,
+    undefined,
+    outreach,
   );
-  return { engine, events, nicheWave, advance: (milliseconds: number) => (nowMs += milliseconds) };
+  return {
+    engine,
+    events,
+    nicheWave,
+    outreach,
+    advance: (milliseconds: number) => (nowMs += milliseconds),
+  };
 }
 
 describe('workflow recovery and completion', () => {
@@ -72,7 +83,7 @@ describe('workflow recovery and completion', () => {
   });
 
   it('creates a job only after both technician acceptance and customer confirmation', async () => {
-    const { engine, nicheWave } = createHarness();
+    const { engine, nicheWave, outreach } = createHarness();
     await engine.start(repairRequestSchema.parse(request));
     const accepted = await engine.handleMessage({
       type: 'TECHNICIAN_RESPONSE_RECEIVED',
@@ -84,6 +95,8 @@ describe('workflow recovery and completion', () => {
     });
     expect(accepted.status).toBe('CUSTOMER_CONFIRMATION');
     expect(nicheWave.createdJobs).toHaveLength(0);
+    expect(outreach.deliveries.map(({ audience }) => audience)).toEqual(['technician', 'customer']);
+    expect(accepted.events.some(({ type }) => type === 'CUSTOMER_CONTACTED')).toBe(true);
 
     const completed = await engine.handleMessage({
       type: 'CUSTOMER_CONFIRMATION_RECEIVED',

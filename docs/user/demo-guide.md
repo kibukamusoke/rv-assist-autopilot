@@ -9,7 +9,7 @@
 1. Submit the synthetic Phoenix air-conditioning request.
 2. Show the qualification: HVAC, high urgency, and vulnerable occupant.
 3. Show the `adk-gemini` trace: required safety tool, decision summary, evidence, token count, and no fallback.
-4. Show the ranked technicians and the reasons behind each score.
+4. Show the ranked technicians, reasons behind each score, and the synthetic technician delivery ID.
 5. Record the first technician declining.
 6. Show Autopilot automatically advancing to the second technician.
 7. Record the second technician accepting.
@@ -23,6 +23,7 @@
 - Cloud Tasks wakes the workflow at an exact response deadline.
 - Pub/Sub accepts asynchronous workflow events.
 - The deployed demonstration is independent of private NicheWave access.
+- Outreach evidence is synthetic and auditable; no real technician or customer is messaged.
 - Consequential decisions remain deterministic and auditable even when Gemini assists with language understanding.
 - If Gemini fails, the trace visibly reports deterministic fallback and the workflow remains safe.
 

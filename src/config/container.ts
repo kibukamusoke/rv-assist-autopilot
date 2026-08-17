@@ -1,4 +1,5 @@
 import { MockNicheWaveAdapter } from '../adapters/nichewave/mock-nichewave-adapter.js';
+import { MockOutreachAdapter } from '../adapters/outreach/mock-outreach-adapter.js';
 import { CloudTasksWorkflowScheduler } from '../adapters/scheduling/cloud-tasks-workflow-scheduler.js';
 import { InMemoryWorkflowScheduler } from '../adapters/scheduling/in-memory-workflow-scheduler.js';
 import type { WorkflowScheduler } from '../adapters/scheduling/workflow-scheduler.js';
@@ -39,6 +40,8 @@ export function createWorkflowEngine(environment: Environment): WorkflowEngine {
     scheduler,
     undefined,
     createRequestQualifier(environment),
+    undefined,
+    new MockOutreachAdapter(),
   );
 }
 
