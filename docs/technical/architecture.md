@@ -1,0 +1,44 @@
+# Technical architecture
+
+## Boundary
+
+This repository owns only the Autopilot agent, workflow, adapters, and deployment assets created from 2026-08-17. NicheWave/RV Assist remains an external system. The dependency direction is one-way through `NicheWaveAdapter`; Autopilot never imports platform source code or reads its database.
+
+## Responsibility split
+
+Gemini and Google ADK interpret language, invoke narrow tools, and recommend plans. Deterministic TypeScript validates eligibility, ranks by explicit inputs, enforces state transitions, performs idempotency checks, and blocks confirmed-job creation until a technician acceptance exists.
+
+Cloud Run exposes the request API and receives authenticated Pub/Sub and Cloud Tasks pushes. Pub/Sub carries resumable external workflow events. Cloud Tasks dispatches technician-response deadlines at their scheduled time instead of using delivery failures as a timer. Firestore stores durable workflow state with optimistic version checks. Local in-memory implementations preserve the same contracts for repeatable judge runs.
+
+## State lifecycle
+
+```mermaid
+stateDiagram-v2
+    [*] --> REQUEST_RECEIVED
+    REQUEST_RECEIVED --> UNDERSTANDING_REQUEST
+    UNDERSTANDING_REQUEST --> HUMAN_ESCALATION: hazard / ambiguity
+    UNDERSTANDING_REQUEST --> SEARCHING_TECHNICIANS
+    SEARCHING_TECHNICIANS --> HUMAN_ESCALATION: no eligible candidates
+    SEARCHING_TECHNICIANS --> CONTACTING_TECHNICIAN
+    CONTACTING_TECHNICIAN --> AWAITING_RESPONSE
+    AWAITING_RESPONSE --> CONTACTING_TECHNICIAN: timeout / decline, next candidate
+    AWAITING_RESPONSE --> MATCH_FOUND: verified acceptance
+    MATCH_FOUND --> CUSTOMER_CONFIRMATION
+    CUSTOMER_CONFIRMATION --> COMPLETED
+```
+
+The workflow implements decline/timeout failover, verified technician acceptance, customer confirmation, and idempotent external job completion. Cloud Tasks owns durable response deadlines; stale tasks are acknowledged without reopening or mutating a completed decision.
+
+## Key invariants
+
+1. Duplicate request IDs return the previously stored workflow.
+2. Only verified, in-area, specialty-matched technicians may be candidates.
+3. Urgent requests exclude technicians unavailable today.
+4. No confirmed job can be created without a recorded technician acceptance timestamp.
+5. Hazardous or low-confidence requests stop for human review before outreach.
+6. Replayed callback messages return the already persisted state rather than repeating an action.
+7. External job creation receives the same idempotency key as customer confirmation.
+
+## Qualification modes
+
+The default deterministic qualifier makes local judging reproducible. Optional Gemini qualification uses structured JSON output and stores source, model, latency, and fallback reason alongside workflow state. The deterministic safety detector is a non-bypassable guard: its hazard flags are merged into Gemini results before outreach decisions.

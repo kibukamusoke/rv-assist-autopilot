@@ -1,0 +1,72 @@
+[
+  {
+    "name": "urgent AC with pets",
+    "description": "AC stopped cooling in 105°F heat with two dogs; service needed today",
+    "category": "hvac",
+    "urgency": "high",
+    "escalate": false
+  },
+  {
+    "name": "roof leak",
+    "description": "Rain is coming through a leak in the RV roof",
+    "category": "roof",
+    "urgency": "medium",
+    "escalate": false
+  },
+  {
+    "name": "refrigerator failure",
+    "description": "The RV refrigerator stopped cooling our food",
+    "category": "appliance",
+    "urgency": "medium",
+    "escalate": false
+  },
+  {
+    "name": "toilet plumbing failure",
+    "description": "The RV toilet plumbing is leaking water onto the floor",
+    "category": "plumbing",
+    "urgency": "medium",
+    "escalate": false
+  },
+  {
+    "name": "ordinary outlet issue",
+    "description": "An electrical outlet has stopped supplying power but there is no smoke",
+    "category": "electrical",
+    "urgency": "medium",
+    "escalate": false
+  },
+  {
+    "name": "dangerous breaker",
+    "description": "Breaker is sparking and smoke is coming from the electrical panel",
+    "category": "electrical",
+    "urgency": "emergency",
+    "escalate": true
+  },
+  {
+    "name": "possible propane leak",
+    "description": "There is a strong propane smell inside the RV",
+    "category": "general",
+    "urgency": "emergency",
+    "escalate": true
+  },
+  {
+    "name": "ambiguous request",
+    "description": "Something is wrong with my RV and I need someone to inspect it",
+    "category": "general",
+    "urgency": "medium",
+    "escalate": true
+  },
+  {
+    "name": "same-day water leak",
+    "description": "A water pipe is leaking and we need plumbing service today",
+    "category": "plumbing",
+    "urgency": "high",
+    "escalate": false
+  },
+  {
+    "name": "same-day furnace",
+    "description": "The furnace stopped heating and we need HVAC service today",
+    "category": "hvac",
+    "urgency": "high",
+    "escalate": false
+  }
+]

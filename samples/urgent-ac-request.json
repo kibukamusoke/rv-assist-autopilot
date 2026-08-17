@@ -1,0 +1,14 @@
+{
+  "id": "sample-phoenix-ac-001",
+  "customerId": "synthetic-customer-001",
+  "description": "My AC stopped cooling at an RV park outside Phoenix. It is 105°F and I have two dogs inside. I need somebody today.",
+  "location": {
+    "city": "Phoenix",
+    "region": "AZ",
+    "latitude": 33.4484,
+    "longitude": -112.074
+  },
+  "rv": { "type": "Class A", "year": 2019 },
+  "constraints": ["Two dogs inside", "Service needed today"],
+  "requestedAt": "2026-08-17T10:00:00.000Z"
+}

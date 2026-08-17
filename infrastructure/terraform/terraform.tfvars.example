@@ -1,0 +1,6 @@
+project_id = "rv-assist-autopilot"
+region     = "us-west4"
+
+# Keep null for the first apply. After pushing an image, replace this with its
+# immutable Artifact Registry digest reference.
+image = null
