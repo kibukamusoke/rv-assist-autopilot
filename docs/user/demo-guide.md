@@ -16,6 +16,20 @@
 8. Confirm as the customer.
 9. Open the final timeline and point to the mock external job ID.
 
+## View the evidence dashboard
+
+When the HTTP service is running, open:
+
+```text
+http://localhost:8080/demo
+```
+
+Enter a workflow ID already created through `POST /v1/requests`. The dashboard displays the outcome, timing, technician attempts, retries, fallback status, ADK/Gemini evidence, synthetic delivery records, and complete workflow timeline. It cannot accept, decline, confirm, retry, or otherwise modify a workflow.
+
+For the deployed private Cloud Run service, an authorized viewer can use the same `/demo?workflowId=<id>` path. Keep the service private; do not weaken authentication for a presentation.
+
+Everything displayed in the dashboard is synthetic demonstration data. It does not prove that a real text message or email was sent.
+
 ## What to emphasize
 
 - This is a background workflow, not a chatbot returning a list.

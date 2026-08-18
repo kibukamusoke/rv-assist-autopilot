@@ -124,6 +124,7 @@ Local defaults are `STATE_STORE=memory`, `EVENT_BUS=memory`, `WORKFLOW_SCHEDULER
 
 Workflow callbacks are available at:
 
+- `GET /demo?workflowId=:id` for the read-only judge evidence dashboard
 - `POST /v1/workflows/:id/technician-responses`
 - `POST /v1/workflows/:id/customer-confirmation`
 - `GET /v1/workflows/:id/timeline`

@@ -9,6 +9,7 @@ import { repairRequestSchema } from '../domain/request.js';
 import { z } from 'zod';
 import { workflowMessageSchema } from '../adapters/events/event-publisher.js';
 import { presentWorkflowTimeline } from './workflow-timeline.js';
+import { renderDashboardLanding, renderWorkflowDashboard } from './observability-dashboard.js';
 
 const pubSubEnvelopeSchema = z.object({
   message: z.object({ data: z.string(), messageId: z.string().optional() }),
@@ -32,6 +33,24 @@ export function createApp(engine: WorkflowEngine): express.Express {
   app.use(express.json({ limit: '256kb' }));
 
   app.get('/health', (_request, response) => response.json({ status: 'ok' }));
+  app.get('/demo', async (request, response, next) => {
+    try {
+      const workflowId =
+        typeof request.query.workflowId === 'string' ? request.query.workflowId : '';
+      if (!workflowId) return response.type('html').send(renderDashboardLanding());
+      const state = await engine.get(workflowId);
+      if (!state) return response.status(404).type('html').send(renderDashboardLanding(workflowId));
+      return response
+        .set(
+          'Content-Security-Policy',
+          "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'",
+        )
+        .type('html')
+        .send(renderWorkflowDashboard(state));
+    } catch (error) {
+      next(error);
+    }
+  });
   app.post('/v1/requests', async (request, response, next) => {
     try {
       const state = await engine.start(repairRequestSchema.parse(request.body));

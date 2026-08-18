@@ -2,6 +2,19 @@
 
 This is an operational record, not a substitute for Git history. Add an entry for each deployed application digest or infrastructure change.
 
+## 2026-08-18 — Judge-facing workflow evidence dashboard
+
+- Project: `rv-assist-autopilot`
+- Region: Cloud Run and Firestore in `us-west4`; Vertex AI global endpoint.
+- Cloud Run URL: `https://rv-assist-autopilot-avakk2nf7a-wn.a.run.app`
+- Current image: `app@sha256:3ba0547e48a695ef914d08e22f1b50ed70813a9439bf59bda88fc8596eb94e31` (`linux/amd64`, Google Cloud Build).
+- Superseded image: `app@sha256:9bd9854ff84ad2ea67d1743e8331aeee9e401e5b8b033732bcd8cb95c8db9a5f` was briefly deployed, then replaced before the milestone commit after live verification showed that late stale-callback acknowledgements inflated terminal duration.
+- Infrastructure: both image promotions were in-place Cloud Run changes with 0 add and 0 destroy; no other infrastructure changed.
+- Application: added a dependency-free, server-rendered, read-only `/demo` dashboard and per-workflow metrics for duration, qualification latency, contacts, retries, failures, declines, timeouts, fallback, completion, and escalation. Terminal duration now stops at the first `COMPLETED` or `HUMAN_ESCALATION` event.
+- Safety: workflow-controlled content is HTML-escaped; a restrictive Content Security Policy is returned; no mutation controls, prompts, hidden reasoning, or real-contact claims are exposed.
+- Verification: 26 tests passed; lint, TypeScript, formatting, production build, and the 10-scenario offline evaluation passed with zero unsafe autonomous actions. Local browser inspection confirmed the rendered desktop layout and synthetic-data disclosure.
+- Live evidence: `outreach-live-20260817-001` returned HTTP 200 with the expected Content Security Policy, `COMPLETED`, 79,238 ms terminal duration, 7,055.53 ms qualification time, two technician contacts, one retry, one customer contact, no fallback, `gemini-3.6-flash`, `calculate_safety_baseline`, active technician `tech-phoenix-rv`, three synthetic delivery IDs, and mock job `mock-job-outreach-live-20260817-001`.
+
 ## 2026-08-17 — Auditable synthetic outreach
 
 - Project: `rv-assist-autopilot`

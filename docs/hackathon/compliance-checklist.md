@@ -70,7 +70,7 @@ Do not mark the submission ready while any item in this section remains unchecke
 - [x] Current live ADK evaluation reports 100% required-tool use and zero fallbacks over ten synthetic scenarios.
 - [ ] Expand safety and adversarial evaluations beyond ten scenarios.
 - [ ] Re-audit and resolve or explicitly accept dependency vulnerabilities before submission.
-- [ ] Add judge-visible operational metrics for latency, fallbacks, retries, and successful resolution.
+- [x] Add judge-visible per-workflow metrics for latency, fallbacks, retries, and successful resolution.
 
 ## F. Reproducibility and documentation
 

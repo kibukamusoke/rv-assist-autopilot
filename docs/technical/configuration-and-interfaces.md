@@ -32,6 +32,7 @@ Gemini-specific and local variables are documented in `.env.example`.
 | Method and path                                | Responsibility                                 |
 | ---------------------------------------------- | ---------------------------------------------- |
 | `GET /health`                                  | Liveness smoke test                            |
+| `GET /demo?workflowId=:id`                     | Read-only judge evidence dashboard             |
 | `POST /v1/requests`                            | Start or retrieve an idempotent workflow       |
 | `GET /v1/workflows/:id`                        | Read persisted workflow state                  |
 | `GET /v1/workflows/:id/timeline`               | Read the presentation-friendly timeline        |
@@ -53,3 +54,15 @@ Cloud Run remains private. Pub/Sub and Cloud Tasks use the dedicated invoker ser
 The runtime service account has `roles/aiplatform.user`. ADK uses its Cloud Run identity through Application Default Credentials, so production has no Gemini API-key secret. The ADK qualifier must call `calculate_safety_baseline`; a missing call invalidates the run and activates deterministic fallback.
 
 The mock adapters and in-memory implementations must remain available so local tests and judge demos do not require cloud credentials, private platform access, or real technician/customer contact. Synthetic delivery records must never be described as SMS or email actually sent to a person.
+
+## Observability metrics
+
+The timeline presenter derives judge-visible metrics from persisted workflow state; it does not maintain a second analytics database. The dashboard displays total workflow duration, qualification duration, technician contact attempts, candidate retries, deterministic-fallback use, final status, ADK framework/model/tool evidence, active technician, external mock job, and every state transition.
+
+- A contact attempt is a persisted `TECHNICIAN_CONTACTED` or `TECHNICIAN_CONTACT_FAILED` event.
+- Candidate retries are contact attempts after the first attempt.
+- Fallback use comes from `qualificationTrace.source === "deterministic-fallback"`.
+- Completion and human escalation are derived from persisted status and events.
+- Terminal workflow duration stops at the first completion or human-escalation event, so later stale callback acknowledgements do not inflate resolution time.
+
+The dashboard is intentionally read-only, server-rendered, dependency-free, and covered by a restrictive Content Security Policy. It must not expose secrets, prompts, hidden reasoning, or real customer data.

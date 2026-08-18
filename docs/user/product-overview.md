@@ -20,6 +20,8 @@ An RV owner may be stranded, dealing with extreme heat, or caring for vulnerable
 - Uses Google ADK and the latest stable general-purpose Gemini Flash model in the live service while preserving a rule-based safety fallback.
 - Runs independently with synthetic data so judges do not need access to NicheWave.
 
+Reviewers can inspect any saved demonstration workflow in a read-only evidence dashboard. It explains what the agent decided, which model and tool were used, how many technicians were tried, whether a fallback occurred, and how the workflow reached its outcome. The dashboard cannot perform workflow actions.
+
 ## What remains simulated
 
 The current deployment uses mock NicheWave and outreach adapters. Technician records, message deliveries, and the final external job ID are synthetic. It does not message real technicians or customers and does not create a job in the pre-existing NicheWave/RV Assist platform.
