@@ -22,8 +22,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "eval": "tsx evals/run-evals.ts",
+    "eval:adversarial": "tsx evals/run-adversarial-evals.ts",
+    "eval:autonomy": "tsx evals/run-autonomy-evals.ts",
     "eval:adk:live": "tsx evals/run-adk-live-evals.ts",
-    "check": "npm run lint && npm run typecheck && npm test && npm run build",
+    "check": "npm run lint && npm run typecheck && npm test && npm run build && npm run eval && npm run eval:autonomy && npm run eval:adversarial",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

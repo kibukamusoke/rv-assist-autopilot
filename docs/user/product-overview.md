@@ -26,12 +26,20 @@ Reviewers can inspect any saved demonstration workflow in a read-only evidence d
 
 The current deployment uses mock NicheWave and outreach adapters. Technician records, message deliveries, and the final external job ID are synthetic. It does not message real technicians or customers and does not create a job in the pre-existing NicheWave/RV Assist platform.
 
+## How safety is tested
+
+Alongside the ordinary benchmark, Autopilot runs an adversarial suite of synthetic scenarios designed to defeat it: dangers described in ways that dodge obvious keywords, denials placed in front of real hazards, hazards written in Spanish, attempts to instruct the assistant through the request text, and a deliberately corrupted technician directory. Every scenario is judged against a stated correct answer rather than against Autopilot's own opinion, so a missed danger counts as a failure instead of disappearing.
+
+The suite also checks the opposite failure: routine requests must keep flowing automatically, because a system that escalates everything is not useful.
+
 ## Product boundary
 
 NicheWave/RV Assist is the pre-existing marketplace. RV Assist Autopilot is the new hackathon agent and workflow layer. This repository contains only Autopilot work created from 2026-08-17 onward.
 
 ## Safety promise
 
-Autopilot can interpret, search, rank, and coordinate. It cannot claim a confirmed repair job until a technician has accepted and the customer has confirmed. Hazardous, ambiguous, or low-confidence situations are sent for human review.
+Autopilot can interpret, search, rank, and coordinate. It cannot claim a confirmed repair job until a technician has accepted and the customer has confirmed. Suspected hazards, apparent attempts to instruct the assistant, requests that name nothing actionable, and cases where no suitable technician exists are sent for human review.
+
+Handing work to a person is treated as a cost, not as the safe choice. An assistant that escalates a stranded customer has not been careful; it has failed them while looking responsible. Every handoff records a specific reason, and the share of ordinary work completed without a person is measured and gated alongside the safety checks.
 
 If the AI service is unavailable or returns an invalid answer, the workflow switches to its conservative rule-based qualification instead of losing the request. The timeline makes that fallback visible to an operator.

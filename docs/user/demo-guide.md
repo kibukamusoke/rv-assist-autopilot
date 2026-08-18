@@ -30,6 +30,14 @@ For the deployed private Cloud Run service, an authorized viewer can use the sam
 
 Everything displayed in the dashboard is synthetic demonstration data. It does not prove that a real text message or email was sent.
 
+## Show the safety testing
+
+```bash
+npm run eval:adversarial
+```
+
+This runs 22 synthetic scenarios built to break the classifier — masked hazards, negation tricks, a Spanish propane leak, instruction injection inside the request text, and a corrupted technician directory — and prints a metrics block. Every gate must pass, including zero unnecessary escalations of ordinary requests.
+
 ## What to emphasize
 
 - This is a background workflow, not a chatbot returning a list.
@@ -47,3 +55,4 @@ Everything displayed in the dashboard is synthetic demonstration data. It does n
 - Do not say the mock job exists in the production NicheWave platform.
 - Do not describe synthetic availability or rankings as current real-world facts.
 - Do not imply Gemini alone can confirm a booking.
+- Do not present the adversarial suite as a security certification; it is a synthetic scenario benchmark.

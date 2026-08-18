@@ -14,7 +14,7 @@ import {
   type Qualification,
   type RepairRequest,
 } from '../domain/request.js';
-import { qualifyRequest } from '../tools/qualify-request.js';
+import { isPhysicalHazardFlag, maxUrgency, qualifyRequest } from '../tools/qualify-request.js';
 import type { QualificationResult, RequestQualifier } from './request-qualifier.js';
 
 const agentOutputSchema = z.object({
@@ -165,11 +165,17 @@ export class AdkRequestQualifier implements RequestQualifier {
   ): Qualification {
     const baseline = qualifyRequest(request);
     const safetyFlags = [...new Set([...modelQualification.safetyFlags, ...baseline.safetyFlags])];
-    const hasHazard = safetyFlags.some((flag) => flag.includes('hazard'));
+    const physicalHazard = safetyFlags.some(isPhysicalHazardFlag);
     return {
       ...modelQualification,
-      urgency: hasHazard ? 'emergency' : modelQualification.urgency,
+      // The model may raise urgency but never lower it below the deterministic baseline.
+      urgency: physicalHazard
+        ? 'emergency'
+        : maxUrgency(modelQualification.urgency, baseline.urgency),
       safetyFlags,
+      // Bounded uplift: untrusted customer text cannot talk the model past the
+      // low-confidence escalation gate.
+      confidence: Math.min(modelQualification.confidence, baseline.confidence + 0.25),
     };
   }
 }

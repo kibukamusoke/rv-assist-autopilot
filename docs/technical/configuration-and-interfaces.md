@@ -53,6 +53,10 @@ Cloud Run remains private. Pub/Sub and Cloud Tasks use the dedicated invoker ser
 
 The runtime service account has `roles/aiplatform.user`. ADK uses its Cloud Run identity through Application Default Credentials, so production has no Gemini API-key secret. The ADK qualifier must call `calculate_safety_baseline`; a missing call invalidates the run and activates deterministic fallback.
 
+Escalation reasons persisted on the `HUMAN_ESCALATION` event are `safety-hazard`, `suspected-injection`, `unrecognised-safety-flag`, `no-actionable-signal`, `qualification-unavailable`, `no-eligible-technicians`, `candidate-pool-exhausted`, `outreach-delivery-failed`, `customer-declined-match`, and `customer-contact-failed`. Operational dashboards must keep safety causes and marketplace causes separate.
+
+Adapter results are not trusted. The workflow engine independently re-checks technician verification and specialty before any outreach, because `NicheWaveAdapter` fronts an external platform outside this repository's control.
+
 The mock adapters and in-memory implementations must remain available so local tests and judge demos do not require cloud credentials, private platform access, or real technician/customer contact. Synthetic delivery records must never be described as SMS or email actually sent to a person.
 
 ## Observability metrics

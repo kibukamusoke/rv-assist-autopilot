@@ -10,6 +10,12 @@ import {
   type RequestQualifier,
 } from '../agents/request-qualifier.js';
 import type { RepairRequest } from '../domain/request.js';
+import {
+  NO_ACTIONABLE_SIGNAL_CONFIDENCE,
+  SAFETY_FLAGS,
+  isEscalationFlag,
+  isPhysicalHazardFlag,
+} from '../tools/qualify-request.js';
 import { rankTechnicians } from '../tools/rank-technicians.js';
 import type { WorkflowState, WorkflowStatus } from './state.js';
 
@@ -48,8 +54,9 @@ export class WorkflowEngine {
     state.qualification = result.qualification;
     state.qualificationTrace = result.trace;
 
-    if (this.requiresHuman(state)) {
-      state = this.transition(state, 'HUMAN_ESCALATION', { reason: 'safety-or-low-confidence' });
+    const escalation = this.escalationReason(state);
+    if (escalation) {
+      state = this.transition(state, 'HUMAN_ESCALATION', { reason: escalation });
       await this.store.save(state);
       return state;
     }
@@ -62,7 +69,20 @@ export class WorkflowEngine {
       longitude: request.location.longitude,
       requireToday: ['high', 'emergency'].includes(qualification.urgency),
     });
-    state.candidates = rankTechnicians(technicians, qualification);
+    // Defence in depth: NicheWave is an external dependency, so its results are
+    // re-checked here rather than trusted. A compromised or faulty adapter must
+    // not be able to place an unverified or mis-specialised technician into outreach.
+    const eligible = technicians.filter(
+      (technician) =>
+        technician.verified && technician.specialties.includes(qualification.category),
+    );
+    if (eligible.length !== technicians.length) {
+      state = this.appendEvent(state, 'INELIGIBLE_CANDIDATES_REJECTED', {
+        rejected: technicians.length - eligible.length,
+        returned: technicians.length,
+      });
+    }
+    state.candidates = rankTechnicians(eligible, qualification);
 
     if (state.candidates.length === 0) {
       state = this.transition(state, 'HUMAN_ESCALATION', { reason: 'no-eligible-technicians' });
@@ -290,13 +310,26 @@ export class WorkflowEngine {
     });
   }
 
-  private requiresHuman(state: WorkflowState): boolean {
+  /**
+   * Returns a named reason to involve a person, or null to proceed.
+   *
+   * Escalation must always be attributable. Absence of confidence is not a
+   * reason on its own: a request classified as `general` is routable general
+   * mobile work, not a failure. Only a request that named no RV system,
+   * component, or trade at all lacks the signal needed to act.
+   *
+   * See docs/technical/autonomy-and-escalation-policy.md.
+   */
+  private escalationReason(state: WorkflowState): string | null {
     const qualification = state.qualification;
-    return (
-      !qualification ||
-      qualification.confidence < 0.6 ||
-      qualification.safetyFlags.some((flag) => flag.includes('hazard'))
-    );
+    if (!qualification) return 'qualification-unavailable';
+    if (qualification.safetyFlags.includes(SAFETY_FLAGS.promptInjection)) {
+      return 'suspected-injection';
+    }
+    if (qualification.safetyFlags.some(isPhysicalHazardFlag)) return 'safety-hazard';
+    if (qualification.safetyFlags.some(isEscalationFlag)) return 'unrecognised-safety-flag';
+    if (qualification.confidence < NO_ACTIONABLE_SIGNAL_CONFIDENCE) return 'no-actionable-signal';
+    return null;
   }
 
   private async requireState(id: string): Promise<WorkflowState> {

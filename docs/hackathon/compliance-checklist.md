@@ -1,6 +1,6 @@
 # Hackathon compliance checklist
 
-- Last updated: 2026-08-17
+- Last updated: 2026-08-18
 - Use: before scope/model decisions, before every submission-candidate deployment, and immediately before submission
 
 Checkboxes represent the current repository state, not permanent facts. Re-check them when rules, code, deployment, or submission fields change.
@@ -41,6 +41,7 @@ Do not mark the submission ready while any item in this section remains unchecke
 - [x] Duplicate/replayed callbacks are idempotent.
 - [x] Add concrete synthetic outreach delivery through a typed adapter with auditable delivery evidence.
 - [x] Capture one complete deployed ADK workflow from intake through mock job completion (`outreach-live-20260817-001`).
+- [x] Gate the autonomous completion rate so background ownership is measured, not assumed.
 - [ ] Map each behavior to the exact official Taskmaster scoring criterion.
 
 ## D. Required technology
@@ -68,7 +69,7 @@ Do not mark the submission ready while any item in this section remains unchecke
 - [x] Tests cover qualification, ranking, state transitions, deadlines, recovery, and ADK fallback.
 - [x] Current offline evaluation reports zero unsafe autonomous actions.
 - [x] Current live ADK evaluation reports 100% required-tool use and zero fallbacks over ten synthetic scenarios.
-- [ ] Expand safety and adversarial evaluations beyond ten scenarios.
+- [x] Expand safety and adversarial evaluations beyond ten scenarios (22-scenario adversarial suite gated in `npm run check`).
 - [ ] Re-audit and resolve or explicitly accept dependency vulnerabilities before submission.
 - [x] Add judge-visible per-workflow metrics for latency, fallbacks, retries, and successful resolution.
 

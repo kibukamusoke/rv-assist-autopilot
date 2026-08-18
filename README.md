@@ -53,6 +53,8 @@ npm run demo
 npm run demo:taskmaster
 ```
 
+`npm run check` gates two opposed properties. `npm run eval:autonomy` requires that ordinary repair work completes without a person; `npm run eval:adversarial` requires that hazards, injection attempts, and untrusted adapter results stop for one. Improving either at the other's expense fails the gate.
+
 The demo submits the synthetic urgent Phoenix AC scenario and prints the resulting workflow state and ranked candidates. It uses no cloud credentials and makes no external calls.
 
 `demo:taskmaster` runs the complete judging story: the first technician declines, Autopilot replans to the next candidate, that technician accepts, the customer confirms, and only then is a synthetic external job created.

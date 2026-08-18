@@ -27,6 +27,7 @@ Written for judges, operators, partners, and other non-developers:
 Written for developers and operators responsible for the system:
 
 - [Technical architecture](technical/architecture.md)
+- [Autonomy and escalation policy](technical/autonomy-and-escalation-policy.md)
 - [Deployment runbook](technical/deployment-runbook.md)
 - [Configuration and interfaces](technical/configuration-and-interfaces.md)
 - [Testing and evaluations](technical/testing-and-evaluations.md)
