@@ -2,6 +2,20 @@
 
 This is an operational record, not a substitute for Git history. Add an entry for each deployed application digest or infrastructure change.
 
+## 2026-08-31 — Interactive console deployment refresh
+
+- Project: `rv-assist-autopilot`.
+- Region: Cloud Run and Firestore in `us-west4`; Vertex AI global endpoint.
+- Cloud Run URL: `https://rv-assist-autopilot-avakk2nf7a-wn.a.run.app`.
+- Public main merge: `3472b72`; application source commit: `f30039e`.
+- Cloud Build: `b1e34b38-03d3-4578-a2c7-f7fef48672ef` succeeded with a `linux/amd64` image.
+- Image: `app@sha256:dd4118a4209bd986a30fa26b718f2dd35509ee7d3ce2d9939b0ab45511638f27`.
+- Cloud Run revision: `rv-assist-autopilot-00011-fzd`, ready with 100% of traffic.
+- Infrastructure: in-place Cloud Run image update; 0 added, 1 changed, 0 destroyed. The final Terraform plan reported no drift. Pub/Sub push authentication and endpoint were unchanged; the Cloud Tasks queue remained `RUNNING` and targeted the Cloud Run service.
+- Verification before deploy: 63 tests across 15 files; lint, TypeScript, build, and all offline, autonomy, and adversarial evaluation gates passed. The suites reported zero unsafe autonomous actions.
+- Live verification after deploy: `/health` returned HTTP 200 with `{"status":"ok"}`; `/console` returned HTTP 200; a synthetic suspected-propane-leak scenario reached `HUMAN_ESCALATION`, recorded `possible-gas-leak`, and contacted no technician.
+- Dependency audit: the production tree reported 30 findings (2 low, 19 moderate, 8 high, 1 critical), all within the already documented Google ADK transitive dependency risk. No forced breaking downgrade was applied during this deployment; the service exposes no archive upload/extraction or ADK database surface.
+
 ## 2026-08-26 — Interactive workflow demo console
 
 - Project: `rv-assist-autopilot`
