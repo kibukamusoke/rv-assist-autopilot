@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "license": "Apache-2.0",
-  "description": "Agentic RV repair request orchestration built for the All Things Agentic Hackathon.",
+  "description": "Durable, auditable AI orchestration for RV repair requests.",
   "type": "module",
   "main": "dist/index.js",
   "engines": {
@@ -12,7 +12,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "demo": "tsx samples/run-demo.ts",
-    "demo:taskmaster": "tsx samples/run-taskmaster-demo.ts",
+    "demo:workflow": "tsx samples/run-workflow-demo.ts",
     "adk:run": "adk run src/agents/agent.ts",
     "adk:web": "adk web",
     "build": "tsc -p tsconfig.build.json",

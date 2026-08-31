@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">RV Assist Autopilot architecture</title>
+  <desc id="desc">A customer request enters a private Cloud Run service. A deterministic workflow engine coordinates Google ADK and Gemini, safety tools, Firestore, Cloud Tasks, Pub/Sub, synthetic outreach, and a mock NicheWave adapter.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071424"/><stop offset="1" stop-color="#102a43"/></linearGradient>
+    <linearGradient id="agent" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6d5dfc"/><stop offset="1" stop-color="#3f8cff"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".24"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7dd3fc"/></marker>
+    <style>
+      text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.title{font-size:42px;font-weight:700;fill:#f8fafc}.subtitle{font-size:20px;font-weight:400;fill:#a9c1d9}.lane{font-size:17px;font-weight:700;fill:#7dd3fc;letter-spacing:1.5px}.box{fill:#173653;stroke:#5c87aa;stroke-width:3}.cloud{fill:#123d5c;stroke:#4285f4;stroke-width:3}.external{fill:#203643;stroke:#a8bacb;stroke-width:3;stroke-dasharray:8 7}.agent{fill:#5b63f6;stroke:#b9c2ff;stroke-width:3}.h{font-size:21px;font-weight:700;fill:#fff}.p{font-size:16px;font-weight:400;fill:#dbe8f5}.small{font-size:14px;font-weight:600;fill:#8fdcff}.line{fill:none;stroke:#7dd3fc;stroke-width:3;marker-end:url(#arrow)}.dash{stroke-dasharray:8 7}.badge{fill:#0b2032;stroke:#5c87aa;stroke-width:2}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <circle cx="1450" cy="70" r="210" fill="#4285f4" opacity=".07"/><circle cx="100" cy="840" r="260" fill="#7c3aed" opacity=".08"/>
+  <text x="70" y="72" class="title">RV Assist Autopilot</text>
+  <text x="70" y="108" class="subtitle">Durable, auditable background coordination — independently runnable with synthetic data</text>
+  <rect x="1248" y="45" width="280" height="44" rx="22" class="badge"/><text x="1388" y="73" text-anchor="middle" class="small">GOOGLE CLOUD · PRIVATE SERVICE</text>
+
+  <text x="70" y="167" class="lane">EXPERIENCE</text><line x1="70" y1="180" x2="1530" y2="180" stroke="#28465f"/>
+  <rect x="70" y="205" width="260" height="112" rx="18" class="box" filter="url(#shadow)"/><text x="200" y="247" text-anchor="middle" class="h">Customer / Operator</text><text x="200" y="277" text-anchor="middle" class="p">Synthetic repair request</text><text x="200" y="299" text-anchor="middle" class="p">Interactive console</text>
+  <rect x="470" y="205" width="330" height="112" rx="18" class="cloud" filter="url(#shadow)"/><text x="635" y="247" text-anchor="middle" class="h">Private Cloud Run API</text><text x="635" y="277" text-anchor="middle" class="p">Intake · callbacks · console</text><text x="635" y="299" text-anchor="middle" class="small">us-west4</text>
+  <rect x="970" y="205" width="330" height="112" rx="18" class="agent" filter="url(#shadow)"/><text x="1135" y="247" text-anchor="middle" class="h">Workflow Engine</text><text x="1135" y="277" text-anchor="middle" class="p">State machine · invariants</text><text x="1135" y="299" text-anchor="middle" class="p">replan · idempotency</text>
+  <path d="M330 261 H470" class="line"/><path d="M800 261 H970" class="line"/>
+
+  <text x="70" y="383" class="lane">AGENT DECISION LAYER</text><line x1="70" y1="396" x2="1530" y2="396" stroke="#28465f"/>
+  <rect x="120" y="425" width="330" height="128" rx="18" class="agent" filter="url(#shadow)"/><text x="285" y="466" text-anchor="middle" class="h">Google ADK Agent</text><text x="285" y="496" text-anchor="middle" class="p">Schema-constrained qualification</text><text x="285" y="524" text-anchor="middle" class="small">required tool invocation</text>
+  <rect x="555" y="425" width="300" height="128" rx="18" class="cloud" filter="url(#shadow)"/><text x="705" y="466" text-anchor="middle" class="h">Gemini 3.6 Flash</text><text x="705" y="496" text-anchor="middle" class="p">Vertex AI</text><text x="705" y="524" text-anchor="middle" class="small">language understanding</text>
+  <rect x="960" y="425" width="360" height="128" rx="18" class="box" filter="url(#shadow)"/><text x="1140" y="466" text-anchor="middle" class="h">Deterministic Safety Tool</text><text x="1140" y="496" text-anchor="middle" class="p">Urgency floor · hazard flags</text><text x="1140" y="524" text-anchor="middle" class="small">non-bypassable TypeScript guards</text>
+  <path d="M970 295 C900 350 555 350 420 425" class="line"/><path d="M450 489 H555" class="line"/><path d="M960 489 H855" class="line"/><path d="M1140 425 C1160 365 1140 340 1135 317" class="line"/>
+
+  <text x="70" y="620" class="lane">DURABLE GOOGLE CLOUD SERVICES</text><line x1="70" y1="633" x2="1530" y2="633" stroke="#28465f"/>
+  <rect x="70" y="665" width="250" height="112" rx="18" class="cloud" filter="url(#shadow)"/><text x="195" y="707" text-anchor="middle" class="h">Firestore</text><text x="195" y="737" text-anchor="middle" class="p">Durable workflow state</text><text x="195" y="759" text-anchor="middle" class="small">optimistic version checks</text>
+  <rect x="370" y="665" width="250" height="112" rx="18" class="cloud" filter="url(#shadow)"/><text x="495" y="707" text-anchor="middle" class="h">Cloud Tasks</text><text x="495" y="737" text-anchor="middle" class="p">Response deadlines</text><text x="495" y="759" text-anchor="middle" class="small">authenticated wake-ups</text>
+  <rect x="670" y="665" width="250" height="112" rx="18" class="cloud" filter="url(#shadow)"/><text x="795" y="707" text-anchor="middle" class="h">Pub/Sub</text><text x="795" y="737" text-anchor="middle" class="p">External workflow events</text><text x="795" y="759" text-anchor="middle" class="small">authenticated push</text>
+  <rect x="970" y="665" width="260" height="112" rx="18" class="box" filter="url(#shadow)"/><text x="1100" y="707" text-anchor="middle" class="h">Synthetic Outreach</text><text x="1100" y="737" text-anchor="middle" class="p">Auditable delivery records</text><text x="1100" y="759" text-anchor="middle" class="small">no real contact</text>
+  <rect x="1280" y="665" width="250" height="112" rx="18" class="external" filter="url(#shadow)"/><text x="1405" y="701" text-anchor="middle" class="h">NicheWaveAdapter</text><text x="1405" y="729" text-anchor="middle" class="p">Synthetic mock now</text><text x="1405" y="753" text-anchor="middle" class="p">External API later</text>
+  <path d="M1050 317 C930 590 195 555 195 665" class="line"/><path d="M1100 317 C1030 575 495 555 495 665" class="line"/><path d="M795 665 C795 610 700 580 635 317" class="line"/><path d="M1175 317 C1170 560 1100 575 1100 665" class="line"/><path d="M1215 317 C1340 490 1405 535 1405 665" class="line dash"/>
+
+  <rect x="70" y="825" width="1460" height="42" rx="12" fill="#091d2e" stroke="#28465f"/><text x="800" y="852" text-anchor="middle" class="p">Safety boundary: hazards and instruction injection stop before outreach · confirmed job requires technician acceptance + customer confirmation</text>
+</svg>

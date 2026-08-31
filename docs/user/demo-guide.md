@@ -4,9 +4,34 @@
 
 “RV Assist Autopilot takes ownership of an RV repair request. It understands urgency, ranks eligible technicians, handles declines and response deadlines in the background, requires both technician acceptance and customer confirmation, and produces an auditable timeline.”
 
+## Drive it yourself
+
+With the service running, open:
+
+```text
+http://localhost:8080/console
+```
+
+For the deployed private Cloud Run service, start an authenticated tunnel first and use the same path:
+
+```text
+gcloud run services proxy rv-assist-autopilot --region us-west4 --port 8080
+```
+
+The console offers four synthetic presets and lets you play the technician and the customer:
+
+| Preset                 | What it shows                                                                 |
+| ---------------------- | ----------------------------------------------------------------------------- |
+| Urgent AC failure      | Proceeds autonomously at high urgency; drive decline, replan, accept, confirm |
+| Stuck awning           | Ordinary work with no named trade, routed to a general technician             |
+| Suspected propane leak | Stops before any technician is contacted, reason `safety-hazard`              |
+| Instruction injection  | Request text tries to steer the agent, reason `suspected-injection`           |
+
+The console can start and advance workflows. The `/demo` evidence view remains strictly read-only and is the surface to show when the point is the audit record rather than the interaction.
+
 ## What to show
 
-1. Submit the synthetic Phoenix air-conditioning request.
+1. Open `/console` and start the **Urgent AC failure** preset.
 2. Show the qualification: HVAC, high urgency, and vulnerable occupant.
 3. Show the `adk-gemini` trace: required safety tool, decision summary, evidence, token count, and no fallback.
 4. Show the ranked technicians, reasons behind each score, and the synthetic technician delivery ID.

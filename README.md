@@ -1,20 +1,20 @@
 # RV Assist Autopilot
 
-An asynchronous AI operator for the **All Things Agentic Hackathon — Taskmaster track**. It qualifies RV repair requests, finds and ranks technicians, and advances outreach workflows with explicit safety gates.
+An asynchronous AI operator that qualifies RV repair requests, finds and ranks technicians, and advances outreach workflows with explicit safety gates.
 
 > [!IMPORTANT]
-> **Hackathon eligibility and project boundary:** NicheWave and its RV Assist marketplace existed before the All Things Agentic Hackathon. This repository contains only the new RV Assist Autopilot work created during the submission period beginning **2026-08-17**. NicheWave/RV Assist is an external platform dependency accessed only through the `NicheWaveAdapter` contract. No pre-existing NicheWave source code is copied into this repository.
+> **Project boundary:** NicheWave and its RV Assist marketplace existed before RV Assist Autopilot. This repository contains only the Autopilot layer developed beginning **2026-08-17**. NicheWave/RV Assist is an external platform dependency accessed only through the `NicheWaveAdapter` contract. No NicheWave source code is copied into this repository.
 
 ## What this scaffold proves
 
 - Google ADK runs live Gemini request qualification with typed tools and structured output.
 - A deterministic workflow engine owns consequential state transitions and prevents unconfirmed bookings.
 - Firestore, Pub/Sub, and Cloud Tasks have production adapters; in-memory implementations make local runs credential-free.
-- A synthetic NicheWave adapter lets judges run the workflow without private platform access.
+- A synthetic NicheWave adapter makes the workflow independently runnable without private platform access.
 - A synthetic outreach adapter produces auditable technician and customer delivery evidence without sending real messages.
 - Cloud Run packaging and Terraform establish the deployment path without hiding infrastructure decisions.
 
-The current hackathon slice intentionally stops short of contacting real technicians or writing production NicheWave bookings. It establishes live ADK/Gemini qualification, durable orchestration, safety and confirmation gates, runnable synthetic demonstrations, and measurable evaluation seams first.
+The current implementation intentionally stops short of contacting real technicians or writing production NicheWave bookings. It establishes live ADK/Gemini qualification, durable orchestration, safety and confirmation gates, runnable synthetic demonstrations, and measurable evaluation seams first.
 
 ## Architecture
 
@@ -39,7 +39,7 @@ flowchart LR
     Tasks --> API
 ```
 
-Start with the [documentation hub](docs/README.md). Before changing models or submission scope, review the [hackathon requirements register](docs/hackathon/requirements-register.md) and [compliance checklist](docs/hackathon/compliance-checklist.md). Technical architecture is in [docs/technical/architecture.md](docs/technical/architecture.md), with editable [Mermaid source](docs/technical/architecture.mmd). Plain-language product and workflow guides are under [docs/user](docs/user/).
+Start with the [documentation hub](docs/README.md). Technical architecture is in [docs/technical/architecture.md](docs/technical/architecture.md), with editable [Mermaid source](docs/technical/architecture.mmd) and rendered [PNG](docs/technical/architecture.png). Plain-language product and workflow guides are under [docs/user](docs/user/).
 
 ## Quick start
 
@@ -50,14 +50,14 @@ cp .env.example .env
 npm ci
 npm run check
 npm run demo
-npm run demo:taskmaster
+npm run demo:workflow
 ```
 
 `npm run check` gates two opposed properties. `npm run eval:autonomy` requires that ordinary repair work completes without a person; `npm run eval:adversarial` requires that hazards, injection attempts, and untrusted adapter results stop for one. Improving either at the other's expense fails the gate.
 
 The demo submits the synthetic urgent Phoenix AC scenario and prints the resulting workflow state and ranked candidates. It uses no cloud credentials and makes no external calls.
 
-`demo:taskmaster` runs the complete judging story: the first technician declines, Autopilot replans to the next candidate, that technician accepts, the customer confirms, and only then is a synthetic external job created.
+`demo:workflow` runs the complete coordination story: the first technician declines, Autopilot replans to the next candidate, that technician accepts, the customer confirms, and only then is a synthetic external job created.
 
 Run the HTTP service:
 
@@ -106,19 +106,19 @@ The normal mock demo is deterministic by design. Gemini is used for language und
 
 ## Commands
 
-| Command                   | Purpose                                                 |
-| ------------------------- | ------------------------------------------------------- |
-| `npm run dev`             | Start the API with file watching                        |
-| `npm run demo`            | Run the credential-free synthetic scenario              |
-| `npm run demo:taskmaster` | Run the complete decline/replan/accept/confirm timeline |
-| `npm test`                | Run unit and integration tests once                     |
-| `npm run test:watch`      | Run tests in watch mode                                 |
-| `npm run eval`            | Run the 10-scenario metric and recovery evaluation      |
-| `npm run eval:adk:live`   | Run the 10-scenario live ADK/Gemini evaluation          |
-| `npm run lint`            | Run ESLint                                              |
-| `npm run typecheck`       | Type-check without emitting                             |
-| `npm run build`           | Compile production JavaScript into `dist/`              |
-| `npm run check`           | Lint, type-check, test, and build                       |
+| Command                 | Purpose                                                 |
+| ----------------------- | ------------------------------------------------------- |
+| `npm run dev`           | Start the API with file watching                        |
+| `npm run demo`          | Run the credential-free synthetic scenario              |
+| `npm run demo:workflow` | Run the complete decline/replan/accept/confirm timeline |
+| `npm test`              | Run unit and integration tests once                     |
+| `npm run test:watch`    | Run tests in watch mode                                 |
+| `npm run eval`          | Run the 10-scenario metric and recovery evaluation      |
+| `npm run eval:adk:live` | Run the 10-scenario live ADK/Gemini evaluation          |
+| `npm run lint`          | Run ESLint                                              |
+| `npm run typecheck`     | Type-check without emitting                             |
+| `npm run build`         | Compile production JavaScript into `dist/`              |
+| `npm run check`         | Lint, type-check, test, and build                       |
 
 ## Configuration modes
 
@@ -126,7 +126,7 @@ Local defaults are `STATE_STORE=memory`, `EVENT_BUS=memory`, `WORKFLOW_SCHEDULER
 
 Workflow callbacks are available at:
 
-- `GET /demo?workflowId=:id` for the read-only judge evidence dashboard
+- `GET /demo?workflowId=:id` for the read-only workflow evidence dashboard
 - `POST /v1/workflows/:id/technician-responses`
 - `POST /v1/workflows/:id/customer-confirmation`
 - `GET /v1/workflows/:id/timeline`
@@ -148,7 +148,7 @@ src/
 infrastructure/    Terraform and deployment notes
 tests/             Unit and integration tests
 evals/             Scenario-based evaluation harness
-samples/           Synthetic judge-ready inputs and demo
+samples/           Synthetic inputs and runnable demo
 docs/              Technical, operational, and non-developer documentation
 ```
 

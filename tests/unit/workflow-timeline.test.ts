@@ -11,7 +11,7 @@ import { repairRequestSchema } from '../../src/domain/request.js';
 import { WorkflowEngine } from '../../src/workflows/workflow-engine.js';
 
 describe('presentWorkflowTimeline', () => {
-  it('presents workflow events as judge-readable steps', async () => {
+  it('presents workflow events as reviewer-readable steps', async () => {
     const engine = new WorkflowEngine(
       new InMemoryWorkflowStore(),
       new MockNicheWaveAdapter(),

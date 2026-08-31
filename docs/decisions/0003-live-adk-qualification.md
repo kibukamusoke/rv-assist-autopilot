@@ -7,7 +7,7 @@
 
 The repository exposed an ADK root agent for development, but the deployed HTTP workflow used deterministic qualification. A direct Gemini SDK implementation existed as a comparison path, yet it did not demonstrate that the production workflow itself was orchestrated by Google ADK.
 
-Taskmaster judging benefits from visible autonomous tool use, grounded explanations, reliable fallback, and evidence that the agent participates in a real asynchronous workflow rather than a standalone chat demonstration.
+The product benefits from visible autonomous tool use, grounded explanations, reliable fallback, and evidence that the agent participates in a real asynchronous workflow rather than a standalone chat demonstration.
 
 ## Decision
 
@@ -19,7 +19,7 @@ The lower-level Gemini SDK qualifier remains available for comparison, while the
 
 ## Consequences
 
-- Judges can observe real ADK orchestration and tool evidence in the deployed workflow.
+- Reviewers can observe real ADK orchestration and tool evidence in the deployed workflow.
 - Cloud Run uses its service account and Vertex AI IAM instead of an API-key secret.
 - Qualification adds model latency and token cost; fallback keeps intake available.
 - The trace provides explainability without exposing sensitive reasoning.

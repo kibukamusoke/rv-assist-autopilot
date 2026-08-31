@@ -16,19 +16,13 @@ terraform apply
 
 With `image = null`, this creates the APIs, Artifact Registry repository, service accounts, IAM grants, and Pub/Sub topic. It does not create Cloud Run, the Cloud Tasks queue, or the push subscription.
 
-## 2. Build and push with Apple container
+## 2. Build and push with Cloud Build
+
+Cloud Run requires `linux/amd64`. Cloud Build produces that architecture inside Google's infrastructure and needs no local container runtime, which is why it is the supported path here. Apple `container` can build the same image locally but its registry upload has stalled without creating a tag; see the deployment runbook for that fallback.
 
 ```bash
-gcloud auth print-access-token \
-  | container registry login \
-      --username oauth2accesstoken \
-      --password-stdin us-west4-docker.pkg.dev
-
 IMAGE_TAG="us-west4-docker.pkg.dev/rv-assist-autopilot/rv-assist-autopilot/app:$(git rev-parse --short HEAD)"
-# Cloud Run requires linux/amd64. Apple container uses Rosetta to build this
-# architecture on Apple silicon.
-container build --arch amd64 --tag "$IMAGE_TAG" .
-container image push "$IMAGE_TAG"
+gcloud builds submit --tag "$IMAGE_TAG" .
 
 gcloud artifacts docker images describe "$IMAGE_TAG" \
   --format='value(image_summary.digest)'
