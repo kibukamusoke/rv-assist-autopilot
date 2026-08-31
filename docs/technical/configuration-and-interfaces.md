@@ -32,7 +32,7 @@ Gemini-specific and local variables are documented in `.env.example`.
 | Method and path                                | Responsibility                                 |
 | ---------------------------------------------- | ---------------------------------------------- |
 | `GET /health`                                  | Liveness smoke test                            |
-| `GET /demo?workflowId=:id`                     | Read-only judge evidence dashboard             |
+| `GET /demo?workflowId=:id`                     | Read-only workflow evidence dashboard          |
 | `POST /v1/requests`                            | Start or retrieve an idempotent workflow       |
 | `GET /v1/workflows/:id`                        | Read persisted workflow state                  |
 | `GET /v1/workflows/:id/timeline`               | Read the presentation-friendly timeline        |
@@ -40,6 +40,12 @@ Gemini-specific and local variables are documented in `.env.example`.
 | `POST /v1/workflows/:id/customer-confirmation` | Record customer decision                       |
 | `POST /v1/events/pubsub`                       | Receive authenticated Pub/Sub envelopes        |
 | `POST /v1/events/tasks`                        | Receive authenticated raw Cloud Tasks messages |
+
+| `GET /console` | Interactive demo console |
+| `POST /console/scenarios` | Start a synthetic preset scenario |
+| `POST /console/actions` | Play a technician or customer response |
+
+The console is a separate surface from `/demo` by design. `/demo` is strictly read-only and that property is unit-tested; mutation controls live on the console instead of weakening it. The console exposes no capability the HTTP API lacks — its buttons drive the same workflow messages as the technician and customer callback endpoints. Both surfaces are server-rendered with no client-side script and run under a Content Security Policy that disallows scripts.
 
 Cloud Run remains private. Pub/Sub and Cloud Tasks use the dedicated invoker service account and OIDC authentication.
 
@@ -57,11 +63,11 @@ Escalation reasons persisted on the `HUMAN_ESCALATION` event are `safety-hazard`
 
 Adapter results are not trusted. The workflow engine independently re-checks technician verification and specialty before any outreach, because `NicheWaveAdapter` fronts an external platform outside this repository's control.
 
-The mock adapters and in-memory implementations must remain available so local tests and judge demos do not require cloud credentials, private platform access, or real technician/customer contact. Synthetic delivery records must never be described as SMS or email actually sent to a person.
+The mock adapters and in-memory implementations must remain available so local tests and demonstrations do not require cloud credentials, private platform access, or real technician/customer contact. Synthetic delivery records must never be described as SMS or email actually sent to a person.
 
 ## Observability metrics
 
-The timeline presenter derives judge-visible metrics from persisted workflow state; it does not maintain a second analytics database. The dashboard displays total workflow duration, qualification duration, technician contact attempts, candidate retries, deterministic-fallback use, final status, ADK framework/model/tool evidence, active technician, external mock job, and every state transition.
+The timeline presenter derives reviewer-visible metrics from persisted workflow state; it does not maintain a second analytics database. The dashboard displays total workflow duration, qualification duration, technician contact attempts, candidate retries, deterministic-fallback use, final status, ADK framework/model/tool evidence, active technician, external mock job, and every state transition.
 
 - A contact attempt is a persisted `TECHNICIAN_CONTACTED` or `TECHNICIAN_CONTACT_FAILED` event.
 - Candidate retries are contact attempts after the first attempt.

@@ -18,9 +18,9 @@ An RV owner may be stranded, dealing with extreme heat, or caring for vulnerable
 - Requires technician acceptance and customer confirmation before creating a job.
 - Preserves a readable timeline for explanation and review.
 - Uses Google ADK and the latest stable general-purpose Gemini Flash model in the live service while preserving a rule-based safety fallback.
-- Runs independently with synthetic data so judges do not need access to NicheWave.
+- Runs independently with synthetic data so reviewers do not need access to NicheWave.
 
-Reviewers can inspect any saved demonstration workflow in a read-only evidence dashboard. It explains what the agent decided, which model and tool were used, how many technicians were tried, whether a fallback occurred, and how the workflow reached its outcome. The dashboard cannot perform workflow actions.
+Reviewers can drive the whole thing themselves from a demo console: pick one of four synthetic scenarios, then play the technician and the customer while Autopilot qualifies the request, ranks and contacts technicians, replans after a decline, and records the outcome. Separately, they can inspect any saved workflow in a read-only evidence dashboard. It explains what the agent decided, which model and tool were used, how many technicians were tried, whether a fallback occurred, and how the workflow reached its outcome. The dashboard cannot perform workflow actions.
 
 ## What remains simulated
 
@@ -34,7 +34,7 @@ The suite also checks the opposite failure: routine requests must keep flowing a
 
 ## Product boundary
 
-NicheWave/RV Assist is the pre-existing marketplace. RV Assist Autopilot is the new hackathon agent and workflow layer. This repository contains only Autopilot work created from 2026-08-17 onward.
+NicheWave/RV Assist is the pre-existing marketplace. RV Assist Autopilot is a separate agent and workflow layer. This repository contains only Autopilot work developed from 2026-08-17 onward.
 
 ## Safety promise
 

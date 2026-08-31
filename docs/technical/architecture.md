@@ -8,7 +8,9 @@ This repository owns only the Autopilot agent, workflow, adapters, and deploymen
 
 Gemini and Google ADK interpret language, invoke the narrow deterministic safety-baseline tool, and return a schema-constrained qualification with a concise decision summary and evidence. Deterministic TypeScript re-applies safety invariants, validates eligibility, ranks by explicit inputs, enforces state transitions, performs idempotency checks, and blocks confirmed-job creation until a technician acceptance exists.
 
-Cloud Run exposes the request API and receives authenticated Pub/Sub and Cloud Tasks pushes. Pub/Sub carries resumable external workflow events. Cloud Tasks dispatches technician-response deadlines at their scheduled time instead of using delivery failures as a timer. Firestore stores durable workflow state with optimistic version checks. `OutreachAdapter` owns technician and customer message delivery; the current synthetic implementation records deterministic delivery evidence without contacting real people. Local in-memory implementations preserve the same contracts for repeatable judge runs.
+Cloud Run exposes the request API and receives authenticated Pub/Sub and Cloud Tasks pushes. Pub/Sub carries resumable external workflow events. Cloud Tasks dispatches technician-response deadlines at their scheduled time instead of using delivery failures as a timer. Firestore stores durable workflow state with optimistic version checks. `OutreachAdapter` owns technician and customer message delivery; the current synthetic implementation records deterministic delivery evidence without contacting real people. Local in-memory implementations preserve the same contracts for repeatable development and evaluation runs.
+
+Rendered overview: [PNG](architecture.png) · [SVG](architecture.svg) · editable [Mermaid source](architecture.mmd).
 
 ## State lifecycle
 
@@ -65,6 +67,6 @@ The governing rules are in [the autonomy and escalation policy](autonomy-and-esc
 
 ## Qualification modes
 
-The default local qualifier is deterministic so credential-free judging remains reproducible. The deployed qualifier runs the latest stable general-purpose Gemini Flash model through Google ADK and Vertex AI. The configured submission candidate is Gemini 3.6 Flash. It stores the framework, agent, requested and resolved model versions when available, tool calls, token count, latency, safe decision summary, evidence, and fallback reason alongside workflow state. Hidden model reasoning is never requested or exposed.
+The default local qualifier is deterministic so credential-free evaluation remains reproducible. The deployed qualifier runs the latest stable general-purpose Gemini Flash model through Google ADK and Vertex AI. The configured model is Gemini 3.6 Flash. It stores the framework, agent, requested and resolved model versions when available, tool calls, token count, latency, safe decision summary, evidence, and fallback reason alongside workflow state. Hidden model reasoning is never requested or exposed.
 
 The ADK agent must call `calculate_safety_baseline`. Its final response must pass a Zod schema. Application code then independently recomputes and merges the deterministic safety flags, forces emergency urgency when a physical hazard is present, floors urgency at the deterministic baseline, and caps confidence at a bounded uplift — making those guards non-bypassable. Any timeout, model/API error, invalid structured response, or missing required tool call activates deterministic fallback instead of failing the workflow.

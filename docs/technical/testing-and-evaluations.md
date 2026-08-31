@@ -5,10 +5,10 @@
 ```bash
 npm ci
 npm run check
-npm run demo:taskmaster
+npm run demo:workflow
 ```
 
-`npm run check` runs linting, TypeScript checking, the Vitest suite, the production build, the offline benchmark, the autonomy suite, and the adversarial safety suite. The evaluation harness covers qualification metrics and workflow recovery scenarios. The Taskmaster demo executes decline, replan, acceptance, customer confirmation, and mock external-job creation.
+`npm run check` runs linting, TypeScript checking, the Vitest suite, the production build, the offline benchmark, the autonomy suite, and the adversarial safety suite. The evaluation harness covers qualification metrics and workflow recovery scenarios. The workflow demo executes decline, replan, acceptance, customer confirmation, and mock external-job creation.
 
 The ADK qualifier unit suite uses synthetic ADK events. It verifies required tool evidence, schema parsing, deterministic safety-flag preservation, and fallback without spending model tokens.
 
@@ -107,9 +107,9 @@ A deadline test is complete only when all of the following are verified:
 
 Use synthetic request IDs for every live test and record significant deployed verification in `deployment-history.md`.
 
-## Judge dashboard checks
+## Workflow dashboard checks
 
-Unit coverage verifies that the dashboard is read-only, labels synthetic data, displays model/tool/delivery evidence, escapes workflow-controlled content, and derives retry, timeout, fallback, escalation, duration, and completion metrics from persisted state. Before a submission-candidate deployment:
+Unit coverage verifies that the dashboard is read-only, labels synthetic data, displays model/tool/delivery evidence, escapes workflow-controlled content, and derives retry, timeout, fallback, escalation, duration, and completion metrics from persisted state. Before a deployment:
 
 1. Create a new synthetic workflow.
 2. Complete at least one decline/retry/accept/confirm path.
@@ -119,4 +119,4 @@ Unit coverage verifies that the dashboard is read-only, labels synthetic data, d
 
 ## Dependency audit note
 
-The 2026-08-17 production image install reported 28 dependency findings (2 low, 18 moderate, 7 high, 1 critical); the full development tree reported 29. These are currently transitive findings in the Google ADK dependency tree. Do not use `npm audit fix --force` without reviewing ADK compatibility. Dependency remediation is tracked as a priority and must be re-audited before submission.
+The 2026-08-17 production image install reported 28 dependency findings (2 low, 18 moderate, 7 high, 1 critical); the full development tree reported 29. These are currently transitive findings in the Google ADK dependency tree. Do not use `npm audit fix --force` without reviewing ADK compatibility. Dependency remediation is tracked as a priority and must be re-audited before deployment.

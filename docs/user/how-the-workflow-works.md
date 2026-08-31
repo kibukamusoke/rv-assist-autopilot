@@ -19,7 +19,7 @@ The following example uses synthetic data.
 
 For every AI-assisted qualification, the timeline can show which agent and model ran, which approved tool it used, a short decision summary, supporting evidence, processing time, and whether the safe rule-based fallback was needed. It does not reveal private model chain-of-thought.
 
-The hackathon deployment does not send real SMS or email. Its outreach adapter simulates delivery and records exactly what the workflow would need to audit a production provider. A future provider can implement the same interface only after contact authorization, privacy, and delivery requirements are agreed.
+The current demonstration deployment does not send real SMS or email. Its outreach adapter simulates delivery and records exactly what the workflow would need to audit a production provider. A future provider can implement the same interface only after contact authorization, privacy, and delivery requirements are agreed.
 
 ## When a request is unclear or unsafe
 

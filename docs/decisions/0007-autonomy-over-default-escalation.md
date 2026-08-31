@@ -10,7 +10,7 @@ Escalation had become the implicit safe default. Any request that matched no cat
 
 Measured against a corpus of 40 ordinary RV repair requests, **55% escalated to a human**. Awnings, slide-outs, stabilizer jacks, entry steps, generators, solar controllers, levelling systems and flooring all fell through. Meanwhile the synthetic roster carries a `general` specialty on two technicians, so the route existed and was never reachable.
 
-This is a direct failure of the product thesis. A Taskmaster-track agent that hands back more than half of routine work is weak on precisely the axis it exists to demonstrate, and the credential-free deterministic mode — the one a judge runs locally and the one used as fallback when Gemini is unavailable — was the worst affected.
+This is a direct failure of the product thesis. An autonomous operator that hands back more than half of routine work is weak on precisely the axis it exists to demonstrate, and the credential-free deterministic mode — used for local evaluation and as fallback when Gemini is unavailable — was the worst affected.
 
 Two process failures allowed it to persist:
 

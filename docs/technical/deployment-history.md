@@ -2,7 +2,36 @@
 
 This is an operational record, not a substitute for Git history. Add an entry for each deployed application digest or infrastructure change.
 
-## 2026-08-18 — Judge-facing workflow evidence dashboard
+## 2026-08-26 — Interactive workflow demo console
+
+- Project: `rv-assist-autopilot`
+- Region: Cloud Run and Firestore in `us-west4`; Vertex AI global endpoint.
+- Cloud Run URL: `https://rv-assist-autopilot-avakk2nf7a-wn.a.run.app`
+- Application commit: `feffaae`.
+- Current image: `app@sha256:af7c8285c66a71cd1acd1bb29cc4898d4e4b3e92a0400a08501a9ccf2d3d1635` (`linux/amd64`, Google Cloud Build).
+- Infrastructure: in-place Cloud Run image update; 0 added, 1 changed, 0 destroyed. No other resource changed.
+- Application: added a server-rendered, interactive `/console` where reviewers can launch disclosed synthetic scenarios and drive technician decline/acceptance and customer confirmation. It remains separate from the read-only `/demo` evidence dashboard.
+- Safety: the Cloud Run service remains private; all console data, people, contact attempts, and job records are synthetic; workflow-controlled output is HTML-escaped and served with a restrictive Content Security Policy.
+- Verification before deploy: 63 tests across 15 files; lint, TypeScript, formatting, and build clean. Offline evaluation passed 10/10 scenarios with zero unsafe actions. Autonomy evaluation passed 51/51 scenarios with 100% required-stop accuracy. Adversarial evaluation passed 22/22 scenarios with zero unsafe or forbidden dispatches.
+- Live evidence: console workflow `demo-urgent-ac-mt9kk7xc` used Google ADK with `gemini-3.6-flash` and `calculate_safety_baseline`; ranked `tech-desert-mobile` first; replanned after that technician declined; recorded acceptance by `tech-phoenix-rv` at score 95.2; notified the synthetic customer; and completed mock job `mock-job-demo-urgent-ac-mt9kk7xc` in 10,506 ms. The rendered workflow page returned HTTP 200 and included the synthetic-data disclosure.
+
+## 2026-08-18 — Autonomy default and adversarial safety hardening
+
+- Project: `rv-assist-autopilot`
+- Region: Cloud Run and Firestore in `us-west4`; Vertex AI global endpoint.
+- Cloud Run URL: `https://rv-assist-autopilot-avakk2nf7a-wn.a.run.app`
+- Commit: `165ba23 feat: make autonomy the default and gate it`
+- Current image: `app@sha256:60ce48b96111fd544f3b2619b9cbed7bea7879a1422185784210fcec365adeab` (`linux/amd64`, Google Cloud Build).
+- Superseded image: `app@sha256:3ba0547e48a695ef914d08e22f1b50ed70813a9439bf59bda88fc8596eb94e31`.
+- Infrastructure: in-place Cloud Run image update; 0 added, 1 changed, 0 destroyed. No other resource changed.
+- Application, safety: single safety-flag taxonomy shared by escalation, the ADK invariant, and the evaluations; proximity-based hazard detection with per-occurrence negation and word boundaries; suspected instruction injection routed to a human; the model may raise urgency but never lower it below the deterministic baseline; NicheWave results re-checked for verification and specialty before outreach.
+- Application, autonomy: `general` became a routable trade backed by an RV component lexicon; confidence recalibrated to 0.9 specialty / 0.75 general / 0.3 no-signal against a 0.5 gate; the boolean `requiresHuman` replaced by named reasons so a classification failure can no longer be recorded as a safety stop.
+- Verification before deploy: 57 tests; lint, TypeScript, formatting and build clean. Offline benchmark 100% across all metrics with zero unsafe actions. Autonomy suite 51 scenarios at 100% autonomous completion and 100% required-stop accuracy. Adversarial suite 22 scenarios with every gate met.
+- Live evidence, autonomy: `autonomy-live-20260818-1159` ("stabilizer jack will not lower") classified `general` at 0.75 confidence via `adk-gemini` / `gemini-3.6-flash` with `calculate_safety_baseline` invoked, contacted `tech-roof-rescue`, and reached `AWAITING_RESPONSE`. On the superseded revision this request escalated to a human.
+- Live evidence, safety: `hazard-live-20260818-1159` ("I smell gas near the water heater") raised `possible-gas-leak`, set `emergency` urgency, and stopped at `HUMAN_ESCALATION` with reason `safety-hazard`. On the superseded revision this request raised no flag at all, was classified medium urgency, and was dispatched to a plumbing technician.
+- Known limitation: `tech-roof-rescue` is the only verified `general` technician in the synthetic roster and carries `availableToday: false`. Urgent general-trade requests therefore find no eligible candidate and escalate as `no-eligible-technicians`. This is a roster property, not a classification failure, but it limits the demo.
+
+## 2026-08-18 — Workflow evidence dashboard
 
 - Project: `rv-assist-autopilot`
 - Region: Cloud Run and Firestore in `us-west4`; Vertex AI global endpoint.
