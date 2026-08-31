@@ -16,6 +16,12 @@ export function renderDashboardLanding(workflowId = ''): string {
   );
 }
 
+function outcomeTone(status: WorkflowState['status']): string {
+  if (status === 'COMPLETED') return 'completed';
+  if (status === 'HUMAN_ESCALATION') return 'stopped';
+  return 'active';
+}
+
 export function renderWorkflowDashboard(state: WorkflowState): string {
   const metrics = calculateWorkflowMetrics(state);
   const trace = state.qualificationTrace;
@@ -27,7 +33,9 @@ export function renderWorkflowDashboard(state: WorkflowState): string {
         index,
       ) => `<li><div class="step"><strong>${index + 1}. ${escapeHtml(title(event.type))}</strong>
         <time datetime="${escapeHtml(event.occurredAt)}">${escapeHtml(event.occurredAt)}</time></div>
-        <pre>${escapeHtml(JSON.stringify(event.details, null, 2))}</pre></li>`,
+        <details class="event-details"><summary>View persisted details</summary>
+          <pre>${escapeHtml(JSON.stringify(event.details, null, 2))}</pre>
+        </details></li>`,
     )
     .join('');
 
@@ -35,7 +43,7 @@ export function renderWorkflowDashboard(state: WorkflowState): string {
     `<a href="/demo">← Another workflow</a><div class="eyebrow">Workflow evidence · synthetic data</div>
      <h1>${escapeHtml(state.id)}</h1><p>${escapeHtml(state.qualification?.summary ?? state.request.description)}</p>
      <div class="grid">
-       <div class="card"><span>Outcome</span><strong class="status">${escapeHtml(state.status)}</strong></div>
+       <div class="card"><span>Outcome</span><strong class="status outcome ${outcomeTone(state.status)}">${escapeHtml(title(state.status))}</strong></div>
        <div class="card"><span>Total duration</span><strong>${formatDuration(metrics.totalDurationMs)}</strong></div>
        <div class="card"><span>Qualification</span><strong>${formatDuration(metrics.qualificationDurationMs)}</strong></div>
        <div class="card"><span>Technician attempts</span><strong>${metrics.technicianContactAttempts}</strong></div>
