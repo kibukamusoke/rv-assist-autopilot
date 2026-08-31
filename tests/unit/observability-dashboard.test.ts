@@ -54,6 +54,9 @@ describe('observability dashboard', () => {
 
     expect(html).toContain('gemini-3.6-flash');
     expect(html).toContain('calculate_safety_baseline');
+    expect(html).toContain('class="status outcome active">Awaiting Response</strong>');
+    expect(html).not.toContain('>AWAITING_RESPONSE</strong>');
+    expect(html).toContain('<details class="event-details"><summary>View persisted details</summary>');
     expect(html).toContain('mock-delivery-001');
     expect(html).not.toContain('<script>alert(1)</script>');
   });

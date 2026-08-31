@@ -43,9 +43,10 @@ export const styles = `
   .card { padding: 16px; }
   .card span { display: block; color: #8da3bf; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
   .card strong { display: block; margin-top: 8px; font-size: 22px; }
-  .status { color: #6ee7b7; }
+  .status, .status.completed { color: #6ee7b7; }
   .status.stopped { color: #fbbf24; }
   .status.active { color: #80d8ff; }
+  .card .outcome { font-size: clamp(16px, 2vw, 22px); line-height: 1.15; overflow-wrap: anywhere; word-break: break-word; }
   button.secondary { background: transparent; color: #e8f0ff; border: 1px solid #3a5578; font-weight: 600; }
   .trace { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
   .trace dl { margin: 0; }
@@ -58,6 +59,9 @@ export const styles = `
   .step { display: flex; gap: 12px; justify-content: space-between; flex-wrap: wrap; }
   time, code { color: #8da3bf; font-size: 12px; }
   pre { white-space: pre-wrap; overflow-wrap: anywhere; color: #a9b9d0; margin: 8px 0 0; font-size: 12px; }
+  .event-details { margin-top: 8px; }
+  .event-details summary { width: fit-content; color: #8da3bf; cursor: pointer; font-size: 12px; font-weight: 700; }
+  .event-details[open] summary { color: #80d8ff; }
   form { display: flex; gap: 10px; flex-wrap: wrap; }
   input { flex: 1; min-width: 240px; background: #07111f; color: #fff; border: 1px solid #3a5578; border-radius: 10px; padding: 12px; }
   button { border: 0; border-radius: 10px; background: #6ee7b7; color: #06201a; padding: 12px 18px; font-weight: 800; cursor: pointer; }
